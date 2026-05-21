@@ -1,0 +1,22 @@
+{
+  "name": "task-manager-api",
+  "version": "1.0.0",
+  "description": "A REST API for managing tasks — workshop fast-track starter",
+  "main": "src/index.js",
+  "type": "module",
+  "scripts": {
+    "start": "node src/index.js",
+    "dev": "node --watch src/index.js",
+    "test": "node --test tests/**/*.test.js",
+    "lint": "eslint src/"
+  },
+  "keywords": ["workshop", "copilot", "task-manager"],
+  "license": "MIT",
+  "dependencies": {
+    "express": "^5.0.1",
+    "uuid": "^11.1.0"
+  },
+  "devDependencies": {
+    "eslint": "^9.0.0"
+  }
+}

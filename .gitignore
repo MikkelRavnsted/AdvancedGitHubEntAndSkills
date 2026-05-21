@@ -1,0 +1,26 @@
+# .gitignore
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE files (except .vscode/mcp.json which is intentional)
+.idea/
+*.swp
+*.swo
+
+# Node modules (if participants install MCP servers locally)
+node_modules/
+
+# Environment files
+.env
+.env.local
+.env.*.local
+
+# Build outputs
+dist/
+build/
+out/
+
+# Participant-specific files that shouldn't be committed
+exercises/scratch.*

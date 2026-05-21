@@ -1,0 +1,15 @@
+{
+  "$schema": "https://json.schemastore.org/mcp-servers",
+  "comment": "Example MCP configuration for cloud agent (repo-level)",
+  "servers": {
+    "github-tools": {
+      "type": "stdio",
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-github"],
+      "env": {
+        "GITHUB_TOKEN": "${GITHUB_TOKEN}"
+      },
+      "description": "GitHub API access for issues, PRs, and repository data"
+    }
+  }
+}
