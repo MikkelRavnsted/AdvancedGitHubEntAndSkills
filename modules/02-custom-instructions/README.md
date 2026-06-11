@@ -1,6 +1,6 @@
-﻿# Module 2: Custom Instructions
+# Module 2: Custom Instructions
 
-> **Duration: 45 minutes** | **Difficulty: Beginner â†’ Intermediate**
+> **Duration: 45 minutes** | **Difficulty: Beginner → Intermediate**
 
 ---
 
@@ -216,11 +216,11 @@ Path-specific instructions let you apply different rules to different parts of y
 ### Why Path-Specific?
 
 Your app likely has different rules for different file types:
-- Source code â†’ coding standards
-- Test files â†’ testing patterns
-- API routes â†’ REST conventions
-- Database code â†’ query patterns
-- Config files â†’ specific formats
+- Source code → coding standards
+- Test files → testing patterns
+- API routes → REST conventions
+- Database code → query patterns
+- Config files → specific formats
 
 ### Exercise 2B: Create Path-Specific Instructions for Your App
 
@@ -405,4 +405,4 @@ After this module, your app project should have:
 
 ---
 
-*Previous: [â† Module 1: Foundations](../01-foundations/README.md) | Next: [Module 3: Reusable Prompt Files â†’](../03-reusable-prompts/README.md)*
+*Previous: [← Module 1: Foundations](../01-foundations/README.md) | Next: [Module 3: Reusable Prompt Files →](../03-reusable-prompts/README.md)*

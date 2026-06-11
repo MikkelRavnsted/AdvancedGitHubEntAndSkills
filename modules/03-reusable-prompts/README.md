@@ -1,4 +1,4 @@
-﻿# Module 3: Reusable Prompt Files
+# Module 3: Reusable Prompt Files
 
 > **Duration: 40 minutes** | **Difficulty: Intermediate**
 
@@ -33,11 +33,11 @@ Reusable prompts (`.prompt.md` files) are **templated, shareable instructions** 
 
 ```
 .github/
-â””â”€â”€ prompts/
-    â”œâ”€â”€ scaffold-component.prompt.md
-    â”œâ”€â”€ code-review.prompt.md
-    â”œâ”€â”€ refactor.prompt.md
-    â””â”€â”€ write-tests.prompt.md
+└── prompts/
+    ├── scaffold-component.prompt.md
+    ├── code-review.prompt.md
+    ├── refactor.prompt.md
+    └── write-tests.prompt.md
 ```
 
 Prompts are discovered by Copilot when placed in `.github/prompts/`. They show up as slash commands in Copilot Chat (e.g., `/scaffold-component`).
@@ -308,7 +308,7 @@ Create a complete API endpoint for the `{{resource}}` resource.
 
 Now put it all together. Use your prompts to **actually build out your app**:
 
-1. Run `/add-feature` or `/add-endpoint` to add 2—3 features to your app
+1. Run `/add-feature` or `/add-endpoint` to add 2–3 features to your app
 2. Run `/write-tests` to generate tests for what you built
 3. Run `/review` to check the generated code against your standards
 4. Fix any issues the review found
@@ -347,4 +347,4 @@ After this module, your app should have:
 
 ---
 
-*Previous: [← Module 2: Custom Instructions](../02-custom-instructions/README.md) | Next: [Module 4: Custom Agents →](../04-custom-agents/README.md)*
+*Previous: [? Module 2: Custom Instructions](../02-custom-instructions/README.md) | Next: [Module 4: Custom Agents ?](../04-custom-agents/README.md)*
