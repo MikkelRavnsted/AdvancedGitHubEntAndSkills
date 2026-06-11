@@ -16,7 +16,7 @@ By the end of this module, you will:
 
 ---
 
-## 3.1 â€” What Are Reusable Prompts?
+## 3.1 — What Are Reusable Prompts?
 
 Reusable prompts (`.prompt.md` files) are **templated, shareable instructions** that you can invoke as slash commands in Copilot Chat. Think of them as "macros" for AI interactions.
 
@@ -44,12 +44,12 @@ Prompts are discovered by Copilot when placed in `.github/prompts/`. They show u
 
 ---
 
-## 3.2 â€” Anatomy of a Prompt File
+## 3.2 — Anatomy of a Prompt File
 
 A `.prompt.md` file has two parts:
 
-1. **YAML frontmatter** (optional) â€” metadata, mode, tools, variables
-2. **Prompt body** â€” the actual prompt text in Markdown
+1. **YAML frontmatter** (optional) — metadata, mode, tools, variables
+2. **Prompt body** — the actual prompt text in Markdown
 
 ### Basic Structure
 
@@ -85,7 +85,7 @@ Create a new component with the following structure:
 
 ---
 
-## 3.3 â€” Template Variables
+## 3.3 — Template Variables
 
 Prompt files support **variables** that get filled in at invocation time. This makes prompts flexible and reusable.
 
@@ -134,14 +134,14 @@ Refer to the following guidelines:
 - [Testing](.github/instructions/testing.instructions.md)
 
 Provide feedback in this format:
-1. **Critical** â€” Must fix before merging
-2. **Suggestion** â€” Would improve quality
-3. **Praise** â€” What's done well
+1. **Critical** — Must fix before merging
+2. **Suggestion** — Would improve quality
+3. **Praise** — What's done well
 ```
 
 ---
 
-## 3.4 â€” Build Your App with Prompts
+## 3.4 — Build Your App with Prompts
 
 Now you'll create prompts **for your specific app** and use them to actually add features. This is where your app starts taking shape.
 
@@ -161,9 +161,9 @@ tools: ["file_system", "terminal"]
 Create a new feature for this application following our project conventions.
 
 ## What to Create
-1. **Implementation** â€” The main feature logic in the appropriate directory
-2. **Tests** â€” Unit tests covering the main behaviors
-3. **Route/Endpoint** (if applicable) â€” Wire it up to the API
+1. **Implementation** — The main feature logic in the appropriate directory
+2. **Tests** — Unit tests covering the main behaviors
+3. **Route/Endpoint** (if applicable) — Wire it up to the API
 
 ## Requirements
 - Follow the conventions in .github/copilot-instructions.md
@@ -207,11 +207,11 @@ Check against:
 - [Project conventions](.github/copilot-instructions.md)
 
 ## Review Checklist
-1. **Correctness** â€” Does it do what it should? Edge cases handled?
-2. **Security** â€” Input validation? No hardcoded secrets? Safe queries?
-3. **Conventions** â€” Follows our naming, structure, and patterns?
-4. **Tests** â€” Are there tests? Do they cover the important cases?
-5. **Maintainability** â€” Will someone else understand this in 6 months?
+1. **Correctness** — Does it do what it should? Edge cases handled?
+2. **Security** — Input validation? No hardcoded secrets? Safe queries?
+3. **Conventions** — Follows our naming, structure, and patterns?
+4. **Tests** — Are there tests? Do they cover the important cases?
+5. **Maintainability** — Will someone else understand this in 6 months?
 
 ## Output Format
 For each finding:
@@ -308,12 +308,12 @@ Create a complete API endpoint for the `{{resource}}` resource.
 
 Now put it all together. Use your prompts to **actually build out your app**:
 
-1. Run `/add-feature` or `/add-endpoint` to add 2â€“3 features to your app
+1. Run `/add-feature` or `/add-endpoint` to add 2—3 features to your app
 2. Run `/write-tests` to generate tests for what you built
 3. Run `/review` to check the generated code against your standards
 4. Fix any issues the review found
 
-By the end of this exercise, your app should have **real functionality** â€” built entirely through reusable prompts.
+By the end of this exercise, your app should have **real functionality** — built entirely through reusable prompts.
 ---
 
 ## Key Takeaways

@@ -15,9 +15,9 @@ By the end of this module, you will:
 
 ---
 
-## 2.1 â€” Repository-Wide Instructions
+## 2.1 — Repository-Wide Instructions
 
-The `.github/copilot-instructions.md` file is the **foundation** of Copilot customization. It applies to **every** Copilot interaction in your app's repository â€” completions, chat, agents, and cloud agent.
+The `.github/copilot-instructions.md` file is the **foundation** of Copilot customization. It applies to **every** Copilot interaction in your app's repository — completions, chat, agents, and cloud agent.
 
 ### What Makes Good Instructions?
 
@@ -25,7 +25,7 @@ The `.github/copilot-instructions.md` file is the **foundation** of Copilot cust
 |---|---|
 | Be specific and actionable | Write vague aspirations ("write good code") |
 | Reference your actual stack and tools | Include task-specific instructions |
-| Describe conventions with examples | Write a novel â€” keep it under 2 pages |
+| Describe conventions with examples | Write a novel — keep it under 2 pages |
 | Use imperative language ("Always...", "Never...") | Contradict organization-level instructions |
 | Include build/test/run commands | Include sensitive information |
 
@@ -37,21 +37,21 @@ In **your app project** (created in Module 1), create the file `.github/copilot-
 
 Your instructions should describe YOUR app specifically:
 
-1. **What is your app?** â€” Name, purpose, main features
-2. **Tech stack** â€” Language, framework, database, runtime version
-3. **Project structure** â€” Where source code, tests, and config live
-4. **Code conventions** â€” Naming, patterns, formatting rules
-5. **Build & run commands** â€” How to install, build, test, and run
-6. **Response style** â€” How you want Copilot to communicate
+1. **What is your app?** — Name, purpose, main features
+2. **Tech stack** — Language, framework, database, runtime version
+3. **Project structure** — Where source code, tests, and config live
+4. **Code conventions** — Naming, patterns, formatting rules
+5. **Build & run commands** — How to install, build, test, and run
+6. **Response style** — How you want Copilot to communicate
 
-Here are **starter templates** for different stacks â€” pick yours and customize:
+Here are **starter templates** for different stacks — pick yours and customize:
 
 #### Node.js / TypeScript
 ```markdown
 # Copilot Instructions
 
 ## Project
-This is a [your app name] â€” a [description]. Built with TypeScript and Express.
+This is a [your app name] — a [description]. Built with TypeScript and Express.
 
 ## Tech Stack
 - Runtime: Node.js 20+
@@ -77,11 +77,11 @@ This is a [your app name] â€” a [description]. Built with TypeScript and Ex
 - File naming: kebab-case (e.g., `user-service.ts`)
 
 ## Project Structure
-- `src/` â€” Application source code
-- `src/routes/` â€” API route handlers
-- `src/services/` â€” Business logic
-- `src/models/` â€” Data models / types
-- `tests/` â€” Test files (mirror src/ structure)
+- `src/` — Application source code
+- `src/routes/` — API route handlers
+- `src/services/` — Business logic
+- `src/models/` — Data models / types
+- `tests/` — Test files (mirror src/ structure)
 ```
 
 #### Python / FastAPI
@@ -89,7 +89,7 @@ This is a [your app name] â€” a [description]. Built with TypeScript and Ex
 # Copilot Instructions
 
 ## Project
-This is a [your app name] â€” a [description]. Built with Python and FastAPI.
+This is a [your app name] — a [description]. Built with Python and FastAPI.
 
 ## Tech Stack
 - Runtime: Python 3.12+
@@ -114,12 +114,12 @@ This is a [your app name] â€” a [description]. Built with Python and FastAP
 - Always use async def for route handlers
 
 ## Project Structure
-- `app/` â€” Application source code
-- `app/routers/` â€” API route handlers
-- `app/services/` â€” Business logic
-- `app/models/` â€” SQLAlchemy models
-- `app/schemas/` â€” Pydantic schemas
-- `tests/` â€” Test files
+- `app/` — Application source code
+- `app/routers/` — API route handlers
+- `app/services/` — Business logic
+- `app/models/` — SQLAlchemy models
+- `app/schemas/` — Pydantic schemas
+- `tests/` — Test files
 ```
 
 #### C# / ASP.NET
@@ -127,7 +127,7 @@ This is a [your app name] â€” a [description]. Built with Python and FastAP
 # Copilot Instructions
 
 ## Project
-This is a [your app name] â€” a [description]. Built with C# and ASP.NET Core.
+This is a [your app name] — a [description]. Built with C# and ASP.NET Core.
 
 ## Tech Stack
 - Runtime: .NET 8
@@ -152,11 +152,11 @@ This is a [your app name] â€” a [description]. Built with C# and ASP.NET Co
 - Naming: PascalCase for public, _camelCase for private fields
 
 ## Project Structure
-- `src/` â€” Application source code
-- `src/Endpoints/` â€” Minimal API endpoint definitions
-- `src/Services/` â€” Business logic
-- `src/Models/` â€” Entity models
-- `tests/` â€” Test project
+- `src/` — Application source code
+- `src/Endpoints/` — Minimal API endpoint definitions
+- `src/Services/` — Business logic
+- `src/Models/` — Entity models
+- `tests/` — Test project
 ```
 
 #### Go
@@ -164,7 +164,7 @@ This is a [your app name] â€” a [description]. Built with C# and ASP.NET Co
 # Copilot Instructions
 
 ## Project
-This is a [your app name] â€” a [description]. Built with Go.
+This is a [your app name] — a [description]. Built with Go.
 
 ## Tech Stack
 - Runtime: Go 1.22+
@@ -187,12 +187,12 @@ This is a [your app name] â€” a [description]. Built with Go.
 - Package naming: short, lowercase, no underscores
 
 ## Project Structure
-- `cmd/` â€” Main application entry points
-- `internal/` â€” Private application code
-- `internal/handler/` â€” HTTP handlers
-- `internal/service/` â€” Business logic
-- `internal/model/` â€” Data models
-- `internal/store/` â€” Database access
+- `cmd/` — Main application entry points
+- `internal/` — Private application code
+- `internal/handler/` — HTTP handlers
+- `internal/service/` — Business logic
+- `internal/model/` — Data models
+- `internal/store/` — Database access
 ```
 
 > **Adapt the template** to match your actual app and stack. The more specific and accurate, the better Copilot will perform.
@@ -209,7 +209,7 @@ Copilot should reference your instructions. Expand the "References" in the respo
 
 ---
 
-## 2.2 â€” Path-Specific Instructions
+## 2.2 — Path-Specific Instructions
 
 Path-specific instructions let you apply different rules to different parts of your app. They use **glob patterns** in a YAML frontmatter block.
 
@@ -241,7 +241,7 @@ applyTo: "**/*.test.*,**/*.spec.*,**/test/**,**/tests/**,**/*_test.*"
 - Mock external dependencies (database, APIs, file system)
 - Include both happy path and error cases
 - Test edge cases: empty inputs, nulls, boundary values
-- Keep tests independent â€” no shared mutable state between tests
+- Keep tests independent — no shared mutable state between tests
 ```
 
 #### Option 2: `.github/instructions/api-routes.instructions.md`
@@ -273,7 +273,7 @@ applyTo: "**"
 
 - Never hardcode secrets, API keys, or passwords
 - Always validate and sanitize user input
-- Use parameterized queries â€” never string concatenation for SQL
+- Use parameterized queries — never string concatenation for SQL
 - Apply the principle of least privilege
 - Log security events but never log sensitive data (passwords, tokens)
 - Use HTTPS for all external API calls
@@ -289,10 +289,10 @@ applyTo: "**/models/**,**/store/**,**/repository/**,**/migrations/**,**/db/**"
 
 # Database Conventions
 
-- Always use migrations for schema changes â€” never manual DDL
+- Always use migrations for schema changes — never manual DDL
 - Use transactions for operations that modify multiple tables
 - Add indexes for columns used in WHERE clauses and JOINs
-- Use parameterized queries â€” never string interpolation
+- Use parameterized queries — never string interpolation
 - Name tables in plural (users, orders), columns in snake_case
 - Always include created_at and updated_at timestamps
 - Soft-delete where appropriate (add deleted_at column)
@@ -310,9 +310,9 @@ applyTo: "**/models/**,**/store/**,**/repository/**,**/migrations/**,**/db/**"
 
 ---
 
-## 2.3 â€” Agent Instructions (AGENTS.md)
+## 2.3 — Agent Instructions (AGENTS.md)
 
-`AGENTS.md` is for **AI agents** specifically â€” both the local agent mode in VS Code and the cloud coding agent. It tells agents how to behave when working autonomously on your app.
+`AGENTS.md` is for **AI agents** specifically — both the local agent mode in VS Code and the cloud coding agent. It tells agents how to behave when working autonomously on your app.
 
 ### Exercise 2C: Create AGENTS.md for Your App
 
@@ -337,7 +337,7 @@ Create an `AGENTS.md` file in the **root** of your app project:
 - Follow the conventions in `.github/copilot-instructions.md`
 - Add tests for any new functionality
 - Update the README when adding new features or endpoints
-- Keep changes focused â€” one feature or fix per commit
+- Keep changes focused — one feature or fix per commit
 
 ## What NOT to Do
 - Don't modify existing tests unless fixing a bug in them
@@ -350,7 +350,7 @@ Create an `AGENTS.md` file in the **root** of your app project:
 
 ---
 
-## 2.4 â€” Verify Your Instructions Work
+## 2.4 — Verify Your Instructions Work
 
 ### Test 1: General Copilot Chat
 
@@ -381,9 +381,9 @@ Try asking Copilot to generate code **before** and **after** you add instruction
 - **`copilot-instructions.md`** is always-on for every Copilot interaction in your app
 - **`.instructions.md`** files with `applyTo` globs target specific file types
 - **`AGENTS.md`** tells agents how to work autonomously in your project
-- Instructions are **additive** â€” they combine across all layers
+- Instructions are **additive** — they combine across all layers
 - The more **specific and accurate** your instructions, the better Copilot performs
-- **Test your instructions** â€” ask Copilot questions and verify it uses them
+- **Test your instructions** — ask Copilot questions and verify it uses them
 
 ---
 
@@ -391,9 +391,9 @@ Try asking Copilot to generate code **before** and **after** you add instruction
 
 After this module, your app project should have:
 - [x] A working app (from Module 1)
-- [x] `.github/copilot-instructions.md` â€” describing your app and conventions
+- [x] `.github/copilot-instructions.md` — describing your app and conventions
 - [x] At least 2 path-specific `.instructions.md` files
-- [x] `AGENTS.md` â€” agent behavior guidelines
+- [x] `AGENTS.md` — agent behavior guidelines
 
 ---
 
