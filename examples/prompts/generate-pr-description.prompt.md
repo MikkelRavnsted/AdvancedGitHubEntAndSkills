@@ -1,6 +1,6 @@
 ---
 description: "Generate a pull request description from the current branch changes"
-mode: "agent"
+agent: agent
 tools: [execute, read, search]
 ---
 

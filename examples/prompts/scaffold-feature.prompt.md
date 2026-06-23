@@ -1,6 +1,6 @@
 ---
 description: "Scaffold a new feature with implementation, tests, and documentation"
-mode: "agent"
+agent: agent
 tools: [execute, read, edit, search]
 argument-hint: "featureName language (e.g., user-authentication typescript)"
 ---

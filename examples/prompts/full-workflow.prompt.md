@@ -1,6 +1,6 @@
 ---
 description: "Generate a complete application from scratch using the full agentic workflow"
-mode: "agent"
+agent: agent
 tools: [execute, read, edit, search]
 argument-hint: "appName theme features dataStore framework (e.g., my-app minimal basic-crud sqlite express)"
 ---
