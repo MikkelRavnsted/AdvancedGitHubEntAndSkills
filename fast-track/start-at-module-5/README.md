@@ -1,142 +1,72 @@
-# Task Manager API — Fast-Track Starter (Module 5)
+# Fast-Track: Start at Module 5
 
-> **Skip Modules 1-4** — Jump straight into skills, plugins, and enterprise features.
-
----
-
-## What Is This App?
-
-A **Task Manager REST API** with two resources — tasks and categories. It supports:
-
-- **Tasks**: Create, list, update, delete with status tracking (`pending` → `in-progress` → `done`)
-- **Categories**: Organize tasks by category (e.g., "Work", "Personal") with color coding
-- **Priority levels**: `low`, `medium`, `high` on every task
-- **Filtering**: Query tasks by status or category
-- **Pagination**: `limit` and `offset` support on list endpoints
-- **Validation**: Input validation with descriptive error messages
-- **Duplicate detection**: Categories enforce unique names
-
-The app uses **in-memory storage** (no database required) so you can focus entirely on Copilot features.
-
-### Tech Stack
-
-| Component | Technology |
-|---|---|
-| Runtime | Node.js 20+ (ES modules) |
-| Framework | Express 5 |
-| Testing | Node.js built-in test runner (`node:test`) |
-| Storage | In-memory array (no DB needed) |
+> **Modules 1-4 are done.** Jump straight into skills, workflow validation, and the capstone.
 
 ---
 
-## Quick Start
+## What's Here
+
+This workspace has a **reference Task Manager API** (2 resources) and all Module 1-4 customization files pre-built — including the prompts with variables AND agents with handoff protocols. You'll build skills, test the pipeline, and run the full workflow.
+
+### Reference App (for comparison)
+
+A Task Manager API with tasks + categories, priority levels, filtering, and pagination.
 
 ```bash
-# 1. Copy this folder to your workspace
-cp -r fast-track/start-at-module-5 ~/my-workshop-app
-cd ~/my-workshop-app
-
-# 2. Install dependencies
 npm install
-
-# 3. Start the dev server
 npm run dev
+# → http://localhost:3000
 
-# 4. Open in VS Code
-code .
-```
-
-The API runs on `http://localhost:3000`. Try it:
-
-```bash
 curl http://localhost:3000/health
-
-# Create a category
-curl -X POST http://localhost:3000/api/categories \
-  -H "Content-Type: application/json" \
-  -d '{"name": "Work", "color": "#3b82f6"}'
-
-# Create a task
 curl -X POST http://localhost:3000/api/tasks \
   -H "Content-Type: application/json" \
-  -d '{"title": "Build skills for my app", "priority": "high"}'
+  -d '{"title": "Build skills", "priority": "high"}'
 ```
 
----
+### Pre-built Customization Files (Modules 1-4)
 
-## Endpoints
-
-### Tasks
-| Method | Path | Description |
-|--------|------|-------------|
-| GET | `/api/tasks` | List tasks (`?status=`, `?categoryId=`, `?limit=`, `?offset=`) |
-| GET | `/api/tasks/:id` | Get a single task |
-| POST | `/api/tasks` | Create a task (requires `title`; optional `priority`, `categoryId`) |
-| PUT | `/api/tasks/:id` | Update a task |
-| DELETE | `/api/tasks/:id` | Delete a task |
-
-### Categories
-| Method | Path | Description |
-|--------|------|-------------|
-| GET | `/api/categories` | List all categories |
-| GET | `/api/categories/:id` | Get a single category |
-| POST | `/api/categories` | Create a category (unique `name` required) |
-| PUT | `/api/categories/:id` | Update a category |
-| DELETE | `/api/categories/:id` | Delete a category |
-
-### Other
-| Method | Path | Description |
-|--------|------|-------------|
-| GET | `/health` | Health check |
-
-## Testing
-
-```bash
-npm test
-```
-
----
-
-## What's Already Done (Modules 1-4)
-
-This starter has all the work from Modules 1-4 implemented:
-
-| Module | What Was Done | Files |
+| File | Purpose | Module |
 |---|---|---|
-| **Module 1** | Project setup, working app with 2 resources | `package.json`, `src/`, `tests/` |
-| **Module 2** | Custom instructions | `.github/copilot-instructions.md` |
-| **Module 2** | Testing & security instructions | `.github/instructions/*.instructions.md` |
-| **Module 3** | Feature scaffolding prompt | `.github/prompts/add-feature.prompt.md` |
-| **Module 3** | Code review prompt | `.github/prompts/review.prompt.md` |
-| **Module 3** | Test generation prompt | `.github/prompts/write-tests.prompt.md` |
-| **Module 3** | Endpoint scaffold with variables | `.github/prompts/add-endpoint.prompt.md` |
-| **Module 4** | Code reviewer agent | `.github/agents/reviewer.agent.md` |
-| **Module 4** | Architect agent | `.github/agents/architect.agent.md` |
-| **Module 4** | Security auditor agent | `.github/agents/security-auditor.agent.md` |
-| **Module 4** | Domain expert agent | `.github/agents/task-expert.agent.md` |
+| `.github/copilot-instructions.md` | Project conventions | 2 |
+| `.github/instructions/testing.instructions.md` | Test patterns | 2 |
+| `.github/instructions/security.instructions.md` | Security rules | 2 |
+| `.github/prompts/add-feature.prompt.md` | Feature scaffolding | 3 |
+| `.github/prompts/write-tests.prompt.md` | Test generation | 3 |
+| `.github/prompts/generate-app.prompt.md` | **App generation with variables** | 3 |
+| `.github/agents/architect.agent.md` | Designs app structure (with handoff) | 4 |
+| `.github/agents/reviewer.agent.md` | Code quality review (with handoff) | 4 |
+| `.github/agents/security-auditor.agent.md` | Security audit (with handoff) | 4 |
+| `.github/agents/orchestrator.agent.md` | **Coordinates full workflow** | 4 |
 
 ---
 
-## Next Steps
+## Verify Before Starting
 
-### → Start Module 5: Skills & Plugins
+Open Copilot Chat (`Ctrl+Shift+I`) and test:
 
-Open [Module 5: Skills & Plugins](../../modules/05-skills-and-plugins/README.md) and begin at **Exercise 5A**.
+1. **Instructions**: Ask *"What are the conventions for this project?"* → should reference Express, `node:test`
+2. **Prompts**: Type `/generate-app` → should appear as a slash command
+3. **Agents**: Type `@orchestrator` → should respond as the workflow coordinator
+4. **App**: Run `npm run dev` → `http://localhost:3000/health` returns `{"status":"ok"}`
 
-In Module 5, you will:
-1. Create a dependency analysis skill (`SKILL.md`) for this app
-2. Create an app-specific skill for your domain
-3. Create a code health assessment skill
-4. Design a plugin manifest packaging everything together
-5. Explore the Agent Plugin Marketplace
+---
 
-After Module 5, continue with Modules 6 → 7 in order.
+## What You'll Build (Modules 5-7)
 
-### Quick Verification
+| Module | What You Create | Result |
+|---|---|---|
+| **5** | Skills (SKILL.md) + workflow testing | Procedures + pipeline validation |
+| **6** | MCP config (optional) | External tool access |
+| **7** | Run the full workflow | Generated app in `./generated/[appName]/` |
 
-Before starting, verify everything is working:
+Your main tasks:
+1. Create skills that teach agents specific procedures
+2. Wire skills into the orchestrator
+3. Test the full pipeline (does @architect → @security-auditor → /generate-app → @reviewer work?)
+4. Run `@orchestrator` with variables and get a working app out
 
-1. **Instructions**: Ask Copilot *"What are the conventions for this project?"* — should reference Express, `node:test`, etc.
-2. **Prompts**: Type `/add-feature` in Copilot Chat — should be available as a slash command
-3. **Agents**: Type `@reviewer` in Copilot Chat — should respond using the 🔴/🟡/🟢 format
-4. **App**: Run `npm run dev` and hit `http://localhost:3000/health` — should return `{"status":"ok"}`
+---
+
+## → Start Module 5
+
+Open [Module 5: Skills & Validation](../../modules/05-skills-and-plugins/README.md) and begin at Section 5.1.

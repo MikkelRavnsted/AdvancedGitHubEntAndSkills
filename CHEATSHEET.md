@@ -59,9 +59,18 @@ tools: ["file_system", "terminal"]
 
 You are a [role] who [does what].
 
-## Expertise
-- Area 1
-- Area 2
+## How You Work
+1. [Step 1]
+2. [Step 2]
+3. [Step 3]
+
+## Handoff Output
+- **[Key data]**: [structured output]
+- **Verdict**: [status]
+- **Ready for**: @next-agent
+
+## Variable Handling
+ALWAYS use provided variables. Never substitute defaults.
 
 ## Rules
 - Rule 1
@@ -95,14 +104,25 @@ You are a [role] who [does what].
 |---|---|
 | Open Copilot Chat | `Ctrl+Shift+I` |
 | Toggle Agent Mode | Click mode selector in chat |
-| Open Customizations | `Chat: Open Customizations` (Command Palette) |
 | Invoke custom agent | `@agent-name` in chat |
 | Invoke custom prompt | `/prompt-name` in chat |
-| Initialize project | `/init` in chat |
-| Generate instruction | `/create-instruction` |
-| Generate prompt | `/create-prompt` |
-| Generate agent | `/create-agent` |
-| Generate skill | `/create-skill` |
+| Reload Window | `Ctrl+Shift+P` → "Reload Window" (after MCP changes) |
+
+---
+
+## The Iteration Loop
+
+```
+Run (@agent or /prompt) → Inspect output → Fix the .md file → Re-run
+```
+
+| Output Problem | File to Fix |
+|---|---|
+| Wrong code style | `copilot-instructions.md` |
+| Wrong structure | `generate-app.prompt.md` |
+| Ignores variables | The agent's `## Variable Handling` |
+| Unstructured output | The agent's `## Handoff Output` |
+| Skips steps | The skill's `## Steps` |
 
 ---
 

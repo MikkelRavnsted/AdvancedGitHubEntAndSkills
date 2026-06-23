@@ -1,235 +1,200 @@
-# Module 7: Polish, Validate & Present
+# Module 7: Capstone — Generate Your App
 
-> **Duration: 40 minutes** | **Difficulty: Putting It All Together**
+> **Duration: 45 minutes** | **Difficulty: Putting It All Together**
 
 ---
 
 ## Learning Objectives
 
-By the end of this module, you will:
-
-- Validate that your entire Copilot configuration works end-to-end
-- Add final features to your app using the full agentic workflow
-- Verify instructions, prompts, agents, skills, and MCP work together
-- Present your app and its Copilot configuration to the group
+- Run the full workflow end-to-end and produce a working app
+- Run again with different variables and compare the outputs
+- Diagnose and fix issues by editing the right customization file
+- Present your workflow to the group
 
 ---
 
-## 7.1 — What You've Built
-
-Over the past modules, you've created a **real application** with a complete Copilot customization layer:
+## How Everything Connects
 
 ```
-your-app/
-├── .github/
-│   ├── copilot-instructions.md       # Module 2: Project conventions
-│   ├── instructions/
-│   │   ├── testing.instructions.md   # Module 2: Test patterns
-│   │   └── security.instructions.md  # Module 2: Security rules
-│   ├── prompts/
-│   │   ├── add-feature.prompt.md     # Module 3: Feature scaffolding
-│   │   ├── review.prompt.md          # Module 3: Code review
-│   │   ├── write-tests.prompt.md     # Module 3: Test generation
-│   │   └── add-endpoint.prompt.md    # Module 3: API endpoints
-│   ├── agents/
-│   │   ├── reviewer.agent.md         # Module 4: Code reviewer
-│   │   ├── architect.agent.md        # Module 4: Feature designer
-│   │   ├── security-auditor.agent.md # Module 4: Security specialist
-│   │   └── <domain>.agent.md         # Module 4: Domain expert
-│   ├── skills/
-│   │   ├── analyze-deps/SKILL.md     # Module 5: Dependency analysis
-│   │   ├── code-health/SKILL.md      # Module 5: Quality check
-│   │   └── <custom>/SKILL.md         # Module 5: App-specific skill
-│   ├── copilot-mcp.json              # Module 6: Cloud agent MCP
-│   └── copilot-content-exclusions.json
-├── .vscode/
-│   ├── mcp.json                      # Module 6: Local MCP servers
-│   └── settings.json                 # Module 6: Hooks
-├── AGENTS.md                         # Module 6: Cloud agent alignment
-├── src/                              # Your actual app code!
-│   └── ...
-└── tests/
-    └── ...
+┌──────────────────────────────────────────────────────────────┐
+│  @orchestrator (Module 4)                                    │
+│    ↓ reads copilot-instructions.md (Module 2)                │
+│    ↓ follows run-workflow SKILL (Module 5)                   │
+│    ↓ uses MCP tools if configured (Module 6)                 │
+│                                                              │
+│  Stage 1: @architect designs → handoff                       │
+│  Stage 2: @security-auditor reviews → handoff                │
+│  Stage 3: /generate-app creates code (Module 3)              │
+│  Stage 4: Tests run → /write-tests if needed                 │
+│  Stage 5: @reviewer checks quality → handoff                 │
+│  Stage 6: @security-auditor final audit                      │
+│                                                              │
+│  Output: ./generated/[appName]/                              │
+└──────────────────────────────────────────────────────────────┘
 ```
 
 ---
 
-## 7.2 — Validation: Test Everything Together
+## 7.1 — Choose Your Variables
 
-Work through this checklist to verify your configuration works end-to-end.
+Pick your first run:
 
-### Test 1: Instructions Are Active
-
-Ask Copilot Chat: *"What are the coding conventions for this project?"*
-
-✅ **Pass** if it references your `copilot-instructions.md` content.
-
-### Test 2: Prompts Work
-
-Run `/add-feature` and describe a small feature.
-
-✅ **Pass** if it follows your conventions, creates tests, and uses proper structure.
-
-### Test 3: Agents Have Personality
-
-Invoke `@reviewer` on a file in your app.
-
-✅ **Pass** if it uses the output format you defined (🔴/🟡/🟢) and references your conventions.
-
-### Test 4: MCP Is Connected
-
-In agent mode, ask Copilot to use your MCP server (e.g., "Fetch the Express.js docs and summarize the middleware API").
-
-✅ **Pass** if the agent actually uses the MCP tool.
-
-### Test 5: The Full Workflow
-
-Do a complete cycle:
-1. Ask `@architect` to design a small feature
-2. Use `/add-feature` to implement it
-3. Run `/write-tests` to test it
-4. Ask `@reviewer` to review it
-5. Ask `@security-auditor` to audit it
-
-✅ **Pass** if each step builds on the previous and stays consistent with your conventions.
-
-### Validation Scorecard
-
-| Test | Result |
+| Variable | Your Choice |
 |---|---|
-| Instructions active | ⬜ |
-| Prompts work | ⬜ |
-| Agents have personality | ⬜ |
-| MCP connected | ⬜ |
-| Full workflow | ⬜ |
+| `appName` | _____________ |
+| `theme` | minimal / dark / colorful / retro |
+| `features` | basic-crud / basic-crud,auth / basic-crud,search / all |
+| `dataStore` | sqlite / json-file / in-memory |
+| `framework` | (your language/framework) |
 
 ---
 
-## 7.3 — Final Feature Sprint
+## 7.2 — Run the Workflow
 
-Use the remaining time to **add one more feature** to your app using the full workflow:
+Open Copilot Chat and invoke your orchestrator:
 
-1. **Design** — Ask `@architect` what feature to add next
-2. **Build** — Use `/add-feature` or `/add-endpoint` to implement it
-3. **Test** — Use `/write-tests` to cover it
-4. **Review** — Ask `@reviewer` to check it
-5. **Secure** — Ask `@security-auditor` to verify it
-6. **Fix** — Address any issues found
-
-This demonstrates the **complete agentic development loop** — designing, building, testing, reviewing, and securing code with specialized AI assistance at every step.
-
----
-
-## 7.4 — Present Your App
-
-Prepare a **5-minute presentation** covering:
-
-### 1. The App (1 min)
-- What did you build?
-- What language/framework?
-- How many features?
-
-### 2. The Copilot Config (2 min)
-- Show your `.github/` directory structure
-- Highlight one agent or prompt you're proud of
-- Show a quick demo of the agent in action
-
-### 3. What You Learned (2 min)
-- What surprised you?
-- What worked better than expected?
-- What would you do differently?
-- What will you take back to your real projects?
-
----
-
-## 7.5 — Bonus Challenges
-
-If you finish early:
-
-### Bonus A: Agent Collaboration Chain
-
-Create a prompt that orchestrates multiple agents in sequence:
 ```
-1. @architect designs the solution
-2. @security-auditor reviews the design for security
-3. Build it with /add-feature
-4. @reviewer checks the implementation
+@orchestrator Generate an app with these variables:
+- appName: my-tasks
+- theme: minimal
+- features: basic-crud
+- dataStore: json-file
 ```
 
-### Bonus B: Write a Custom MCP Server
+(Replace with your own choices from 7.1)
 
-Write a simple MCP server that exposes a tool relevant to your app:
+**What should happen:**
+1. Orchestrator acknowledges the variables
+2. Designs the architecture (or delegates to @architect)
+3. Reviews for security concerns
+4. Generates the app files in `./generated/my-tasks/`
+5. Runs tests
+6. Reports what was created
 
-```javascript
-import { Server } from '@modelcontextprotocol/sdk/server/index.js';
-import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
+> **If the orchestrator doesn't coordinate all stages**: Your `orchestrator.agent.md` might need stronger instructions. Add "You MUST complete all 7 stages in order. Report progress after each stage."
 
-const server = new Server({
-  name: 'my-app-tools',
-  version: '1.0.0'
-}, {
-  capabilities: { tools: {} }
-});
+---
 
-server.setRequestHandler('tools/list', async () => ({
-  tools: [{
-    name: 'get_app_status',
-    description: 'Returns the current app health status',
-    inputSchema: { type: 'object', properties: {} }
-  }]
-}));
+## 7.3 — Verify the Output
 
-server.setRequestHandler('tools/call', async (request) => {
-  if (request.params.name === 'get_app_status') {
-    return { content: [{ type: 'text', text: 'All systems operational' }] };
-  }
-});
+Check `./generated/[appName]/`:
 
-const transport = new StdioServerTransport();
-await server.connect(transport);
+| Check | Pass? |
+|---|---|
+| Folder exists with correct name | |
+| Has package manifest (package.json, etc.) | |
+| Has entry point / main file | |
+| Has route/handler for each feature | |
+| Has data models matching dataStore choice | |
+| Has tests | |
+| Tests pass when run | |
+| App starts without errors | |
+| Theme reflected in code/config | |
+
+---
+
+## 7.4 — Fix Issues
+
+When something fails (and something will), identify and fix:
+
+| Symptom | Likely Cause | File to Edit |
+|---|---|---|
+| Wrong folder structure | Prompt lacks specifics | `generate-app.prompt.md` |
+| Ignores variables | Agent doesn't pass them | `orchestrator.agent.md` |
+| Security issues in output | Auditor skipped | `security-auditor.agent.md` |
+| Tests fail | No "run tests" instruction | `generate-app.prompt.md` |
+| Convention violations | Instructions unclear | `copilot-instructions.md` |
+| Handoff breaks midway | Output format mismatch | Both agent files involved |
+| Same output every time | Variables not used in template | `generate-app.prompt.md` |
+
+Fix → Re-run → Verify. This iteration loop IS the skill.
+
+---
+
+## 7.5 — Run Again with Different Variables
+
+Now change at least 2 variables and run again:
+
+```
+@orchestrator Generate an app with these variables:
+- appName: my-recipes
+- theme: colorful
+- features: basic-crud,search
+- dataStore: sqlite
 ```
 
-### Bonus C: Package as a Plugin
+| Variable | Run 1 | Run 2 |
+|---|---|---|
+| `appName` | ______ | ______ |
+| `theme` | ______ | ______ |
+| `features` | ______ | ______ |
+| `dataStore` | ______ | ______ |
 
-Design what it would look like to package your entire Copilot config as an installable plugin for your team.
+### Compare the Outputs
 
----
+| Comparison | Expected |
+|---|---|
+| Different folder names | ✅ |
+| Different features present | ✅ (if features changed) |
+| Different data layer | ✅ (if dataStore changed) |
+| Same conventions/style | ✅ (instructions are constant) |
+| Both pass tests | ✅ |
 
-## 7.6 — Workshop Retrospective
-
-Reflect and discuss:
-
-1. **Most valuable thing** you learned today?
-2. **First thing** you'll implement in your real projects?
-3. **Biggest surprise** about what's possible with Copilot customization?
-4. **What would you teach** your team tomorrow?
-
----
-
-## Key Takeaways
-
-- A complete Copilot configuration combines **multiple layers** working together
-- The workflow: instructions → prompts → agents → skills → MCP → hooks
-- **Test your configuration** — verify each piece works and they integrate well
-- The real value comes from **iteration** — start simple, measure impact, improve
-- Everything you built today is **version-controlled** and **shareable** with your team
+If outputs are identical despite different variables → your prompts/agents aren't using the variables. Fix and re-run.
 
 ---
 
-## What's Next?
+## 7.6 — Present Your Workflow
 
-1. **Push your app to GitHub** — share the Copilot config with your team
-2. **Enable the cloud coding agent** — verify it follows your `AGENTS.md`
-3. **Iterate** — add more prompts and agents as you discover repetitive workflows
-4. **Publish** — consider packaging popular configs as plugins for your org
-5. **Measure** — track how Copilot customization impacts your team's velocity
+Show the group (3–5 minutes):
+
+1. **Your file tree** — what `.md` files you created and where
+2. **One generation run** — invoke `@orchestrator` live (or show the output folder)
+3. **One fix you made** — what broke, which file you edited, how that fixed it
+4. **Different variables → different output** — show both `./generated/` folders side by side
+
+> **The point**: You didn't build an app. You built a **workflow that builds apps**. Anyone on your team can run it with different variables and get a working, tested, convention-following app.
 
 ---
 
-*Previous: [← Module 6: Enterprise Setup, MCP & Access Model](../06-enterprise-mcp-config/README.md)*
+## Your Final File Tree
+
+```
+.github/
+├── copilot-instructions.md          ← Module 2
+├── instructions/
+│   ├── testing.instructions.md      ← Module 2
+│   └── security.instructions.md     ← Module 2
+├── prompts/
+│   ├── add-feature.prompt.md        ← Module 3
+│   ├── write-tests.prompt.md        ← Module 3
+│   └── generate-app.prompt.md       ← Module 3
+├── agents/
+│   ├── orchestrator.agent.md        ← Module 4
+│   ├── architect.agent.md           ← Module 4
+│   ├── reviewer.agent.md            ← Module 4
+│   └── security-auditor.agent.md    ← Module 4
+├── skills/
+│   ├── analyze-deps/SKILL.md        ← Module 5
+│   └── run-workflow/SKILL.md        ← Module 5
+└── workflow-tests.md                ← Module 5
+.vscode/
+└── mcp.json                         ← Module 6
+AGENTS.md                            ← Module 2
+generated/
+└── [appName]/                       ← Output (Module 7)
+```
 
 ---
 
-**Congratulations! You've built an app AND a complete Copilot enterprise configuration.**
+## Checkpoint (Final)
 
-You now have hands-on experience with every layer of GitHub Copilot customization — from basic instructions to MCP-connected agentic workflows. Take this back to your teams and multiply the impact.
+- [x] Workflow runs end-to-end (orchestrator coordinates all stages)
+- [x] Generated app in `./generated/[appName]/` — tests pass
+- [x] Ran with different variables — outputs differ correctly
+- [x] At least one issue found, diagnosed, and fixed
+- [x] Presented workflow to group
+
+---
+
+*Previous: [← Module 6](../06-enterprise-mcp-config/README.md) | [Back to Start →](../01-foundations/README.md)*

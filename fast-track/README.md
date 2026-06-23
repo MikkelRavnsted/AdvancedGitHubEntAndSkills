@@ -1,115 +1,104 @@
 # Fast-Track Starters
 
-> **Skip ahead if you already know the basics** — pre-built apps with all prior modules implemented.
+> **Skip ahead if you already know the basics** — workspaces with prior modules already implemented so you can jump into the new material.
 
 ---
 
 ## Who Is This For?
 
-If you already have experience with some of the workshop topics, you can skip the earlier modules and jump in where it gets new for you:
+If you already have experience with some of the workshop topics, skip to where it gets new:
 
-| Your Experience | Start At | Use |
+| Your Experience | Start At | What's Pre-built |
 |---|---|---|
-| New to Copilot customization | **Module 1** | Start from scratch (the normal path) |
-| Already know custom instructions & file structure | **Module 3** | `fast-track/start-at-module-3/` |
-| Already know instructions, prompts, AND agents | **Module 5** | `fast-track/start-at-module-5/` |
+| New to Copilot customization | **Module 1** | Nothing — start from scratch |
+| Know instructions & file types | **Module 3** | Instructions + reference app |
+| Know instructions, prompts, AND agents | **Module 5** | Instructions + prompts + agents + reference app |
 
 ---
 
-## How to Use
+## The Goal (Same for Everyone)
 
-### Option A: Start at Module 3 (Reusable Prompts)
+Regardless of where you start, the end goal is identical:
 
-You already know how to set up `copilot-instructions.md` and `.instructions.md` files. This starter has a working app with all Module 1-2 content implemented.
+```
+Build a set of customization files (.instructions.md, .prompt.md, .agent.md, SKILL.md)
+that form an agentic workflow → run @orchestrator with variables → get a generated app
+in ./generated/[appName]/
+```
+
+The fast-track starters give you the earlier modules' output so you can focus on the modules that are new to you.
+
+---
+
+## Option A: Start at Module 3 (Reusable Prompts)
+
+You already know `copilot-instructions.md` and `.instructions.md`. This starter has the workspace set up with instructions ready — you'll build the prompts, agents, skills, and orchestrator.
 
 ```bash
-# Copy the starter to your own workspace
-cp -r fast-track/start-at-module-3 ~/my-workshop-app
-cd ~/my-workshop-app
-
-# Install and run
+cp -r fast-track/start-at-module-3 ~/my-workshop
+cd ~/my-workshop
 npm install
-npm run dev
-
-# Open in VS Code
 code .
 ```
 
-**What's included:**
-- ✅ Working Task Manager API (Express, Node.js)
-- ✅ CRUD endpoints with validation and error handling
-- ✅ Tests using Node.js built-in test runner
-- ✅ `.github/copilot-instructions.md` — full project conventions
+**What's included (Modules 1-2 done):**
+- ✅ Reference Task Manager API (for testing your workflow output against)
+- ✅ `.github/copilot-instructions.md` — project conventions
 - ✅ `.github/instructions/testing.instructions.md` — test patterns
 - ✅ `.github/instructions/security.instructions.md` — security rules
+
+**What you'll build (Modules 3-7):**
+- Prompts including `/generate-app` with variables
+- Agents with handoff protocols (@architect, @security-auditor, @reviewer, @orchestrator)
+- Skills for workflow automation
+- Run the full workflow → generate an app in `./generated/`
 
 **Go to:** [Module 3: Reusable Prompts →](../modules/03-reusable-prompts/README.md)
 
 ---
 
-### Option B: Start at Module 5 (Skills & Plugins)
+## Option B: Start at Module 5 (Skills & Validation)
 
-You're comfortable with instructions, prompts, AND agents. This starter has a more complete app with Modules 1-4 fully implemented.
+You're comfortable with instructions, prompts, AND agents. This starter has the full workflow plumbing ready — you'll build skills, wire everything together, test the pipeline, and run the capstone.
 
 ```bash
-# Copy the starter to your own workspace
-cp -r fast-track/start-at-module-5 ~/my-workshop-app
-cd ~/my-workshop-app
-
-# Install and run
+cp -r fast-track/start-at-module-5 ~/my-workshop
+cd ~/my-workshop
 npm install
-npm run dev
-
-# Open in VS Code
 code .
 ```
 
-**What's included:**
-- ✅ Working Task Manager API with Tasks + Categories (2 resources)
-- ✅ Priority system, filtering, pagination
-- ✅ Full test suite
+**What's included (Modules 1-4 done):**
+- ✅ Reference Task Manager API (2 resources, full test suite)
 - ✅ `.github/copilot-instructions.md` — project conventions
 - ✅ `.github/instructions/` — testing + security instructions
-- ✅ `.github/prompts/` — add-feature, review, write-tests, add-endpoint
-- ✅ `.github/agents/` — reviewer, architect, security-auditor, task-expert
+- ✅ `.github/prompts/` — add-feature, write-tests, **generate-app** (with variables)
+- ✅ `.github/agents/` — architect, reviewer, security-auditor, **orchestrator** (with handoffs)
 
-**Go to:** [Module 5: Skills & Plugins →](../modules/05-skills-and-plugins/README.md)
+**What you'll build (Modules 5-7):**
+- Skills (SKILL.md) for workflow procedures
+- Wire skills into the orchestrator
+- Test the full pipeline (workflow-tests.md)
+- Run the capstone — generate apps with different variables
 
----
-
-## About the Reference App
-
-Both starters use a **Task Manager API** built with:
-- **Node.js 20+** with ES modules
-- **Express 5** for the web framework
-- **Node.js test runner** (`node:test`) for tests
-- **In-memory storage** (no database setup required)
-
-The app is intentionally simple so you can focus on learning Copilot features rather than wrestling with app complexity.
-
-> **Prefer a different language?** You can use these starters as a reference for what Copilot config files to create, then build your own app in your preferred language. The `.github/` directory structure is language-agnostic.
+**Go to:** [Module 5: Skills & Validation →](../modules/05-skills-and-plugins/README.md)
 
 ---
 
 ## Quick Validation
 
-After setting up, verify everything works:
+After copying a starter, verify it works:
 
 ```bash
-# Run the app
+# Check the reference app runs
 npm run dev
-
-# In another terminal, test it
 curl http://localhost:3000/health
-# → {"status":"ok","timestamp":"..."}
-
-curl -X POST http://localhost:3000/api/tasks \
-  -H "Content-Type: application/json" \
-  -d '{"title": "My first task"}'
-# → {"id":"...","title":"My first task","status":"pending",...}
+# → {"status":"ok"}
 ```
 
-Then open Copilot Chat and verify:
+Then open Copilot Chat (`Ctrl+Shift+I`) and verify:
 - Ask: *"What are the coding conventions for this project?"* — should reference your instructions
-- Try: `/add-feature` (Module 5 starter) — should be available as a slash command
-- Try: `@reviewer` (Module 5 starter) — should respond with the defined format
+- Module 5 starter: Type `/generate-app` — should be available as a slash command
+- Module 5 starter: Type `@orchestrator` — should respond as the workflow coordinator
+
+> **Prefer a different language?** The `.github/` structure is language-agnostic. Use the reference app as a model for what your workflow should generate, then adapt the instructions/prompts for your preferred stack.

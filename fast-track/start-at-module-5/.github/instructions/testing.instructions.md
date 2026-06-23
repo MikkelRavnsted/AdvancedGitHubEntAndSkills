@@ -1,3 +1,7 @@
+---
+applyTo: "**/tests/**,**/*.test.*,**/*.spec.*"
+---
+
 # Testing Instructions
 
 These instructions apply to all files in `tests/`.

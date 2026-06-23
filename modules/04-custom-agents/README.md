@@ -1,358 +1,277 @@
-# Module 4: Custom Agents & Agent Modes
+# Module 4: Custom Agents & Handoff Protocols
 
-> **Duration: 50 minutes** | **Difficulty: Intermediate → Advanced**
+> **Duration: 45 minutes** | **Difficulty: Intermediate → Advanced**
 
 ---
 
 ## Learning Objectives
 
-By the end of this module, you will:
-
-- Understand what custom agents are and when to use them
-- Create specialized agent personas with `.agent.md` files
-- Configure agent tools, models, and behavioral constraints
-- Use agent mode vs. chat mode effectively
-- Build agents that collaborate for complex workflows
+- Create specialized agents with `.agent.md` files
+- Build handoff protocols so agents pass context to each other
+- Create an orchestrator agent that coordinates the full workflow
+- Test agent outputs and iterate on agent files to fix issues
 
 ---
 
-## 4.1 — What Are Custom Agents?
+## Role in the Workflow
 
-Custom agents are **specialized AI personas** you define for your project. Each agent:
+Agents are the **specialists that orchestrate** your workflow. Without agents, you run prompts manually. With agents, you have an assembly line where each specialist handles one stage and hands off to the next.
 
-- Has a specific **role** and **expertise** (e.g., security reviewer, database admin)
-- Can be restricted to specific **tools** (file system, terminal, browser, etc.)
-- Can specify preferred **language models**
-- Has its own **behavioral instructions**
-- Is invoked with `@agent-name` in Copilot Chat
-
-### Custom Agents vs. Other Customizations
-
-| Feature | Instructions | Prompts | Agents |
-|---|---|---|---|
-| **Purpose** | Set rules | Automate tasks | Specialize the AI |
-| **Invocation** | Automatic | Slash command (`/`) | @ mention (`@`) |
-| **Persistence** | Always on | On-demand | On-demand |
-| **Tool access** | N/A | Configurable | Configurable |
-| **Model choice** | N/A | N/A | Configurable |
+Instructions (Module 2) = rules. Prompts (Module 3) = templates. **Agents = judgment + coordination.**
 
 ---
 
-## 4.2 — Anatomy of an Agent File
+## 4.1 — Anatomy of an Agent File
 
-Agent files live in `.github/agents/` and have the `.agent.md` extension.
+Agent files live in `.github/agents/` and are invoked with `@agent-name` in Copilot Chat.
 
-### Basic Structure
+**How it works in practice:**
+- You type `@architect Design a task manager with json-file storage`
+- Copilot becomes the architect, follows the `.agent.md` instructions
+- It responds with structured output
+- You copy that output and pass it to the next agent: `@security-auditor Review this design: [paste]`
+
+> In the capstone (Module 7), the `@orchestrator` handles this whole chain for you.
 
 ```markdown
 ---
-description: "A security-focused code reviewer that identifies vulnerabilities"
+description: "What this agent does (shown in agent list)"
 tools: ["file_system", "terminal"]
+---
+
+# Agent Name
+
+You are a [role]. Your job is to [specific responsibility].
+
+## How You Work
+1. [Step-by-step process]
+2. [What you check]
+3. [What you produce]
+
+## Output Format
+[Structured format other agents can consume]
+
+## Rules
+- [Constraints and boundaries]
+```
+
+### Dos and Don'ts
+
+| ✅ DO | ❌ DON'T |
+|---|---|
+| One focused role per agent | Give an agent multiple unrelated jobs |
+| Define explicit output format | Leave output unstructured |
+| Add `## Handoff Output` section | Repeat rules from instructions (inherited) |
+| Reference prompts: "Use `/add-feature`" | Put task-specific steps here (use skills) |
+| Restrict tools to what's needed | Make agents too generic ("helpful assistant") |
+| Add `## Variable Handling` section | Assume it'll figure out variables |
+
+---
+
+## 4.2 — Build Your Agents
+
+Create these four files in `.github/agents/`. After creating each one, **test it immediately** (Section 4.4) before moving to the next.
+
+### `architect.agent.md` — Designs the app structure
+```markdown
+---
+description: "Designs app architecture based on requirements and variables"
+tools: ["file_system"]
+---
+
+# Architect
+
+You design application architecture. Read existing code patterns before proposing new ones.
+
+## How You Work
+1. Receive variables (appName, features, dataStore, theme)
+2. Design file structure, data models, and routes
+3. Present 2 approaches with trade-offs, recommend one
+
+## Handoff Output
+When done, produce:
+- **Files to Create**: [list with paths]
+- **Data Models**: [schema for each]
+- **Routes**: [endpoint list]
+- **Ready for**: @security-auditor review
+
+## Variable Handling
+ALWAYS use provided variables. Never substitute defaults:
+- features → determines which modules exist
+- dataStore → determines model layer
+- theme → affects naming/formatting choices
+```
+
+### `security-auditor.agent.md` — Reviews for vulnerabilities
+```markdown
+---
+description: "Security auditor that reviews designs and code"
+tools: ["file_system"]
 ---
 
 # Security Auditor
 
-You are a senior security engineer specializing in application security.
-Your role is to identify vulnerabilities, suggest fixes, and educate
-developers on secure coding practices.
+You review designs and code for security vulnerabilities.
 
-## Expertise
-- OWASP Top 10 vulnerabilities
-- Authentication and authorization patterns
-- Input validation and sanitization
-- Cryptographic best practices
-- Supply chain security
+## How You Work
+1. Check for OWASP Top 10 issues
+2. Verify input validation, auth patterns, safe queries
+3. Produce verdict: CLEARED or ISSUES FOUND
 
-## Behavior
-- Always explain WHY something is a vulnerability, not just what to fix
-- Rate findings by severity: Critical, High, Medium, Low
-- Provide code examples for fixes
-- Reference CWE numbers when applicable
-- Never suggest "security through obscurity"
+## Handoff Output
+- **Verdict**: CLEARED / ISSUES FOUND
+- **Findings**: [list with severity if any]
+- **Ready for**: implementation (if cleared) or back to architect
 ```
 
-### Frontmatter Options
-
-| Field | Purpose | Example |
-|---|---|---|
-| `description` | Shown when listing available agents | `"Security-focused code reviewer"` |
-| `tools` | Tools the agent can use | `["file_system", "terminal", "browser"]` |
-| `model` | Preferred language model | `"claude-sonnet-4"`, `"gpt-4o"` |
-
----
-
-## 4.3 — Build Agents for Your App
-
-Now you'll create agents that specialize in **your specific app**. Each agent will have a clear role in your development workflow.
-
-### Exercise 4A: Create a Code Reviewer Agent
-
-This agent will review your app's code against the conventions you set up in Module 2.
-
-Create `.github/agents/reviewer.agent.md` in **your app project**:
-
+### `reviewer.agent.md` — Validates code quality
 ```markdown
 ---
-description: "Reviews code for quality, conventions, and best practices"
+description: "Reviews generated code against project conventions"
 tools: ["file_system"]
 ---
 
 # Code Reviewer
 
-You are a senior engineer reviewing code in this project.
-Always check against the conventions in .github/copilot-instructions.md.
-
-## Review Process
-1. Understand the intent of the code
-2. Check correctness — does it handle edge cases?
-3. Evaluate naming, structure, and readability
-4. Check error handling and input validation
-5. Verify test coverage
+You review code against .github/copilot-instructions.md conventions.
 
 ## Output Format
+### 🔴 Must Fix — [blocking issues]
+### 🟡 Should Fix — [important improvements]  
+### 🟢 Good — [what's done well]
 
-### 🔴 Must Fix
-Critical issues.
-
-### 🟡 Should Fix
-Important improvements.
-
-### 🟢 Suggestions
-Nice-to-haves.
-
-## Rules
-- Be constructive — suggest solutions, not just problems
-- Acknowledge good patterns when you see them
-- Reference project conventions from .github/copilot-instructions.md
+## Handoff Output
+- **Verdict**: APPROVED / CHANGES REQUIRED
+- **Issues**: [list if any]
+- **Ready for**: @security-auditor final audit (if approved)
 ```
 
-**Use it on your app**: In Copilot Chat, type `@reviewer` and ask it to review one of the features you built in Module 3. Does it follow your output format? Does it reference your project conventions?
-
----
-
-### Exercise 4B: Create an Architect Agent
-
-This agent helps you plan the next features for your app.
-
-Create `.github/agents/architect.agent.md`:
-
+### `orchestrator.agent.md` — Coordinates the full workflow
 ```markdown
 ---
-description: "Designs features and makes architectural decisions for this project"
+description: "Orchestrates the full app generation workflow"
 tools: ["file_system", "terminal"]
 ---
 
-# Architect
+# Orchestrator
 
-You are a software architect helping design and extend this application.
-Read the existing code to understand current patterns before proposing changes.
+You coordinate the full workflow. You don't write code — you delegate to specialists and manage handoffs.
 
-## How You Work
-1. Read existing code to understand the current architecture
-2. Present at least 2 approaches with trade-offs
-3. State your recommendation with reasoning
-4. Provide implementation guidance (file structure, interfaces)
+## Workflow Stages
+1. **Collect variables** (appName, theme, features, dataStore)
+2. **Design** → hand off to @architect
+3. **Security review** → hand off to @security-auditor
+4. **Implement** → invoke /generate-app prompt
+5. **Test** → run tests, invoke /write-tests if needed
+6. **Code review** → hand off to @reviewer
+7. **Final audit** → hand off to @security-auditor
 
-## Output Format
-
-### Context
-Current state and what we're trying to achieve.
-
-### Options
-| Option | Pros | Cons |
-|---|---|---|
-
-### Recommendation
-Selected approach with reasoning.
-
-### Implementation Plan
-Step-by-step guide for building it.
+## Handoff Format
+Between stages, produce:
+- ✅ Stage [N] Complete: [what was produced]
+- Passing to: [next agent/prompt]
+- Context: [key info for next stage]
 
 ## Rules
-- Always look at existing patterns before proposing new ones
-- Keep it simple — don't over-engineer
-- Consider the project's current scale (it's a workshop app, not enterprise)
-- Use Mermaid diagrams when helpful
-```
-
-**Use it on your app**: Ask `@architect` to design the next feature you want to add. For example:
-- "Design a caching layer for the API"
-- "How should I add user authentication?"
-- "What's the best way to add search functionality?"
-
----
-
-### Exercise 4C: Create a Security Auditor Agent
-
-Create `.github/agents/security-auditor.agent.md`:
-
-```markdown
----
-description: "Security auditor that finds vulnerabilities in this application"
-tools: ["file_system", "terminal"]
----
-
-# Security Auditor
-
-You perform security audits on this codebase. Identify vulnerabilities,
-assess risk, and provide remediation with code examples.
-
-## Methodology
-1. **Attack Surface** — Identify entry points (APIs, inputs)
-2. **Auth & Access** — Check authentication and authorization
-3. **Data Flow** — Track sensitive data through the system
-4. **Dependencies** — Check for known vulnerabilities
-5. **Config** — Verify secure defaults
-
-## Severity Scale
-- **Critical**: Auth bypass, RCE, data breach
-- **High**: Privilege escalation, significant data exposure
-- **Medium**: XSS, CSRF, information disclosure
-- **Low**: Minor info leaks, misconfigurations
-
-## Output Format
-For each finding:
-- **Severity**: Critical / High / Medium / Low
-- **Location**: File and line
-- **Impact**: What could go wrong
-- **Fix**: Code example showing the remediation
-
-## Rules
-- Check for OWASP Top 10 issues
-- Provide working fix examples
-- Never suggest disabling security features
-- Flag hardcoded credentials even in test files
-```
-
-**Use it on your app**: Run `@security-auditor` against your app and ask it to audit the code you've written so far. Fix any issues it finds.
-
----
-
-### Exercise 4D: Create a Domain-Specific Agent
-
-Create an agent that's **specific to your app's domain**. This agent knows the business context.
-
-**Examples by app type:**
-
-| Your App | Agent Idea | Role |
-|---|---|---|
-| Task Manager | `@project-manager` | Suggests data models, workflow states, UX patterns |
-| Weather App | `@data-engineer` | API integration patterns, caching strategies |
-| Expense Tracker | `@fintech-expert` | Financial calculations, data validation, reporting |
-| Recipe Book | `@content-expert` | Schema design for recipes, search/filter patterns |
-| URL Shortener | `@systems-engineer` | Distributed systems, collision avoidance, analytics |
-| Chat App | `@realtime-expert` | WebSocket patterns, message queuing, presence |
-
-Create `.github/agents/<your-domain-agent>.agent.md` with expertise relevant to your app.
-
-**Use it**: Ask your domain agent to help you design or implement a domain-specific feature.
-
----
-
-## 4.4 — Advanced Agent Patterns
-
-### Pattern: Agent Collaboration
-
-Use multiple agents together on your app:
-
-```
-@architect Design authentication for this app
-
-[Take the design, then...]
-
-@security-auditor Review this auth implementation for vulnerabilities
-
-[Then...]
-
-@reviewer Check the code quality and conventions
-```
-
-**Try it**: Use 2-3 of your agents in sequence on the same piece of work.
-
-### Pattern: Constrained Agent (Read-Only)
-
-An agent that analyzes but never modifies — useful for auditing:
-
-```markdown
----
-description: "Read-only code analyzer"
-tools: ["file_system"]
----
-
-# Analyzer
-You analyze code and provide insights but NEVER modify files.
-Your role is purely analytical.
-```
-
-### Pattern: Agent with Specific Model
-
-For tasks that benefit from a specific model:
-
-```markdown
----
-description: "Creative naming and documentation assistant"
-model: "claude-sonnet-4"
-tools: []
----
-
-# Creative Assistant
-You help with naming, documentation, and crafting clear error messages.
+- Create app in `./generated/[appName]/` — never the repo root
+- If a review finds issues, loop back — don't skip ahead
+- Always run tests after implementation
+- Pass ALL variables to every stage
 ```
 
 ---
 
-## 4.5 — Agent Mode vs. Chat Mode
+## 4.3 — Handoff Protocols
 
-When using your agents, you can switch between **Chat mode** and **Agent mode**:
+The key to reliable multi-agent workflows is **structured handoff output**. Each agent must produce output the next agent can consume.
 
-| Feature | Chat Mode | Agent Mode |
-|---|---|---|
-| **Actions** | Suggests code | Can read/write files, run terminal |
-| **Iteration** | Single response | Multi-step, iterative |
-| **Tool use** | Limited | Full tool access |
-| **Best for** | Questions, review | Building features, refactoring |
+```
+@architect ──design spec──→ @security-auditor ──approved──→ /generate-app
+                                     │
+                              (issues found) ──→ back to @architect
+```
 
-### When to Use Agent Mode
-- Building new features (multi-file changes)
-- Running tests and fixing failures
-- Scaffolding components
-
-### When to Use Chat Mode
-- Asking your reviewer to check code
-- Getting architecture advice
-- Explaining existing code
+Each agent's `## Handoff Output` section defines:
+- What it produces (structured data)
+- What verdict/status it gives
+- Who receives it next
 
 ---
 
-## Key Takeaways
+## 4.4 — Testing Agent Outputs
 
-- **Custom agents** are specialized AI personas defined in `.github/agents/*.agent.md`
-- Invoke agents with `@agent-name` in Copilot Chat
-- Use **tool restrictions** to control what agents can do (read-only, no terminal, etc.)
-- Agent mode is for **multi-step, iterative work**; chat mode is for **quick interactions**
-- Combine multiple agents for **collaborative workflows** on your app
-- Domain-specific agents are more useful than generic ones
+After creating each agent, **test it immediately**. Don't wait until all four are built.
+
+### Test @architect
+
+In Copilot Chat:
+```
+@architect Design a task manager app.
+Variables: appName=my-tasks, features=basic-crud, dataStore=json-file, theme=minimal
+```
+
+**Check the output:**
+- Did it produce the `## Handoff Output` format (Files to Create, Data Models, Routes, Ready for)?
+- Did it use `json-file` (not sqlite or in-memory)?
+- Did it use the app name `my-tasks`?
+
+If not → edit `architect.agent.md` → run the exact same input again.
+
+### Test the handoff
+
+1. Copy @architect's output
+2. Paste it to: `@security-auditor Review this design: [paste output here]`
+3. Does the security auditor understand it? Does it produce CLEARED/ISSUES?
+
+If the handoff breaks → the output format of the sender doesn't match what the receiver expects. Fix both files.
+
+### Common Fixes
+
+| Problem | Fix in .agent.md |
+|---|---|
+| Ignores variables | Add explicit `## Variable Handling` section |
+| Unstructured output | Add strict `## Output Format` with example |
+| Skips steps | Number steps, add "Never skip steps" |
+| Too verbose | Add "Be concise. Use tables and bullet points." |
+| Ignores conventions | Add "ALWAYS read .github/copilot-instructions.md" |
+
+### Test the Full Handoff Chain
+
+Once all four agents are created and individually tested:
+
+```
+@architect → copy output → @security-auditor → copy verdict → (if cleared) run /generate-app → @reviewer
+```
+
+Do this manually once. It proves your agents can work together before the orchestrator automates it.
 
 ---
 
-## Your App Checkpoint
+## 4.5 — How Agents Use Prompts and Instructions
 
-After this module, your app should have:
-- [x] Working app with features (Modules 1-3)
-- [x] `.github/agents/reviewer.agent.md` — reviews your code
-- [x] `.github/agents/architect.agent.md` — designs features
-- [x] `.github/agents/security-auditor.agent.md` — finds vulnerabilities
-- [x] `.github/agents/<domain>.agent.md` — domain-specific expertise
-- [x] At least one security issue found and fixed by your auditor agent
-- [x] A new feature designed using your architect agent
+```
+When you invoke @architect:
+1. copilot-instructions.md loads automatically (rules)
+2. Relevant .instructions.md files load (path-specific rules)
+3. architect.agent.md loads (role + process)
+4. Agent can tell user to invoke /generate-app (template)
+5. Agent can follow SKILL.md steps (procedure)
+```
 
----
-
-## References
-
-- [VS Code: Custom Agents](https://code.visualstudio.com/docs/copilot/copilot-customization#_custom-agents)
-- [Specialize the AI](https://code.visualstudio.com/docs/copilot/customization/custom-agents)
+You never repeat instruction rules in agents — they're inherited. Agents add **role, judgment, and process** on top.
 
 ---
 
-*Previous: [← Module 3: Reusable Prompts](../03-reusable-prompts/README.md) | Next: [Module 5: Skills & Plugins →](../05-skills-and-plugins/README.md)*
+## Checkpoint
+
+- [x] `.github/agents/architect.agent.md` — designs app structure
+- [x] `.github/agents/security-auditor.agent.md` — security review
+- [x] `.github/agents/reviewer.agent.md` — code quality check
+- [x] `.github/agents/orchestrator.agent.md` — coordinates workflow
+- [x] All agents have `## Handoff Output` sections
+- [x] Each agent tested — output inspected and file improved
+- [x] Handoff chain tested (architect → security → implementation)
+
+---
+
+*Previous: [← Module 3](../03-reusable-prompts/README.md) | Next: [Module 5: Skills & Validation →](../05-skills-and-plugins/README.md)*

@@ -15,5 +15,7 @@
 ## Workshop-Specific
 - Workshop content is in `modules/` — each module has its own README.md
 - Exercise files go in `exercises/`
+- Generated app output goes in `generated/[appName]/`
 - Do not modify module instructions unless explicitly asked
-- Participant work goes in their own branch or `exercises/` directory
+- Participant work goes in their own branch, `exercises/`, or `generated/`
+- The fast-track starters in `fast-track/` should stay self-contained

@@ -1,40 +1,28 @@
 # Capstone Project
 
-This directory is for your Module 7 capstone project work.
+This directory is for your Module 7 capstone work.
 
 ## Instructions
+
 See [Module 7: Capstone](../modules/07-capstone/README.md) for full details.
 
-## Your Task
-Build a complete Copilot enterprise configuration for a scenario of your choice:
+## What Happens Here
 
-1. Create `.github/copilot-instructions.md`
-2. Create path-specific instruction files
-3. Create reusable prompts
-4. Create custom agents
-5. Create at least one skill
-6. Configure MCP servers
-7. Validate everything works together
+In Module 7, you run `@orchestrator` with your chosen variables. The generated app lands in `../generated/[appName]/`. This directory is a workspace for any additional capstone notes or presentation prep.
 
-## Directory Structure
-
-Create your capstone with this structure:
+## Quick Reference
 
 ```
-capstone/
-├── .github/
-│   ├── copilot-instructions.md
-│   ├── instructions/
-│   │   └── [your instruction files]
-│   ├── prompts/
-│   │   └── [your prompt files]
-│   ├── agents/
-│   │   └── [your agent files]
-│   ├── skills/
-│   │   └── [your skill directories]
-│   └── copilot-mcp.json
-├── .vscode/
-│   └── mcp.json
-├── AGENTS.md
-└── PRESENTATION.md
+@orchestrator Generate an app with these variables:
+- appName: [your-app-name]
+- theme: minimal / dark / colorful / retro
+- features: basic-crud / basic-crud,auth / basic-crud,search
+- dataStore: sqlite / json-file / in-memory
 ```
+
+## Presentation Notes
+
+Use this space to jot down:
+- What broke and what file you fixed
+- What you'd do differently next time
+- What you'd add to your workflow for your real team

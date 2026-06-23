@@ -1,3 +1,7 @@
+---
+applyTo: "**"
+---
+
 # Security Instructions
 
 These instructions apply to all files in `src/`.

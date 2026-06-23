@@ -1,368 +1,207 @@
-# Module 5: Skills, Plugins & Marketplace
+# Module 5: Skills & Workflow Validation
 
-> **Duration: 50 minutes** | **Difficulty: Advanced**
+> **Duration: 40 minutes** | **Difficulty: Advanced**
 
 ---
 
 ## Learning Objectives
 
-By the end of this module, you will:
-
-- Understand the skills model and how `SKILL.md` files work
-- Build and package a custom skill
-- Understand the scaling path: skills → plugins → marketplace
-- Know how plugins bundle customizations for distribution
-- Configure and manage agent plugins in VS Code
+- Create `SKILL.md` files that teach agents step-by-step procedures
+- Wire skills into your agents so they know when/how to use them
+- Test the full workflow pipeline and fix issues through iteration
+- Validate that variable changes produce different (correct) output
 
 ---
 
-## 5.1 — What Are Skills?
+## Role in the Workflow
 
-**Skills** are packaged capabilities that agents can discover and invoke. They represent the **middle layer** in the scaling model between individual customization files and full marketplace plugins.
+Skills are **step-by-step procedures** that make agents smarter at specific tasks. Without skills, agents use general knowledge. With skills, they follow YOUR project-specific processes exactly.
 
-### The Scaling Pyramid
-
-```
-                ┌───────────────┐
-                │  Marketplace  │  ← Public/org distribution
-                │   Plugins     │     (install & go)
-                ├───────────────┤
-                │    Skills     │  ← Reusable capabilities
-                │  (SKILL.md)  │     (shareable across repos)
-                ├───────────────┤
-                │ Instructions  │  ← Project-specific rules
-                │   & Prompts   │     (single repo)
-                └───────────────┘
-```
-
-### Skills vs. Other Customizations
-
-| Feature | Instructions | Prompts | Skills | Plugins |
-|---|---|---|---|---|
-| **Scope** | Rules/behavior | Task templates | Capabilities | Bundles |
-| **Reuse** | Per-repo | Per-repo | Cross-repo | Marketplace |
-| **Complexity** | Low | Medium | Medium-High | High |
-| **Includes** | Text only | Text + variables | Tools + instructions | Everything |
-| **Discovery** | Automatic | Slash commands | Agent discovers | Install |
+You already have agents (Module 4) that know their role. Now you give them **procedures** to follow and then **test the entire pipeline** end-to-end.
 
 ---
 
-## 5.2 — The SKILL.md File
+## 5.1 — The SKILL.md File
 
-A `SKILL.md` file defines a capability that an agent can use. It describes:
-- **What** the skill does
-- **When** to use it
-- **How** to execute it (tools, commands, steps)
-
-### Structure
+Skills live in `.github/skills/[skill-name]/SKILL.md` and are discovered by agents automatically.
 
 ```markdown
 # Skill Name
 
 ## Description
-What this skill does and when an agent should use it.
+What this skill does.
 
 ## When to Use
-- Trigger conditions
-- Context where this skill applies
+- [Specific trigger conditions — agents match on these]
 
 ## Steps
-1. Step-by-step instructions for execution
-2. Including commands, file operations, etc.
+1. [Precise, numbered step]
+2. [Another step with specific commands]
+3. [Expected output at each step]
 
 ## Tools Required
-- List of tools needed (terminal, file_system, etc.)
-
-## Examples
-Show example invocations and expected outcomes.
+- terminal, file_system
 ```
+
+### Dos and Don'ts
+
+| ✅ DO | ❌ DON'T |
+|---|---|
+| Number every step explicitly | Write vague steps like "analyze the code" |
+| Include specific commands to run | Put agent personality here (use .agent.md) |
+| Define clear "When to Use" triggers | Duplicate rules from instructions |
+| List required tools | Create one massive skill (split them) |
+| Add expected output format | Skip the trigger conditions |
 
 ---
 
-## 5.3 — Build Skills for Your App
+## 5.2 — Build Your Skills
 
-Skills make your agents smarter. You'll create skills that are useful for **your specific app**, then see how they connect to the broader plugin/marketplace ecosystem.
+### `analyze-deps` — Dependency checking
 
-### Exercise 5A: Create a Dependency Analysis Skill
-
-Your app has dependencies. Create a skill that any agent can use to audit them.
-
-Create `.github/skills/analyze-deps/SKILL.md` in **your app project**:
+Create `.github/skills/analyze-deps/SKILL.md`:
 
 ```markdown
 # Analyze Dependencies
 
 ## Description
-Analyzes this project's dependencies to find outdated packages,
-security vulnerabilities, and unused dependencies.
+Checks project dependencies for security issues and outdated packages.
 
 ## When to Use
 - When asked to "check dependencies" or "audit packages"
-- When investigating security vulnerabilities
-- Before upgrading to a new framework version
+- Before adding new dependencies to the project
 
 ## Steps
-
-### 1. Identify Package Manager
-Look for manifest files:
-- `package.json` → npm/yarn/pnpm
-- `requirements.txt` / `pyproject.toml` → pip/poetry
-- `go.mod` → Go modules
-- `*.csproj` → NuGet
-- `pom.xml` / `build.gradle` → Maven/Gradle
-
-### 2. Check for Outdated Packages
-Run the appropriate command:
-- npm: `npm outdated`
-- pip: `pip list --outdated`
-- go: `go list -u -m all`
-
-### 3. Check for Vulnerabilities
-- npm: `npm audit`
-- pip: `pip-audit`
-- go: `govulncheck ./...`
-
-### 4. Generate Report
-Produce a markdown report with:
-- Total dependencies (direct + transitive)
-- Outdated packages with versions
-- Security vulnerabilities with severity
-- Recommended actions (prioritized)
+1. Identify package manager (look for package.json, pyproject.toml, etc.)
+2. Run audit: `npm audit` / `pip-audit` / equivalent
+3. Check for outdated: `npm outdated` / `pip list --outdated`
+4. Report: total deps, vulnerabilities (by severity), outdated packages
 
 ## Tools Required
-- terminal (to run package manager commands)
-- file_system (to read manifest files)
+- terminal, file_system
 ```
 
-**Use it**: Ask one of your agents (e.g., `@security-auditor`) to analyze your app's dependencies. The agent should discover and follow this skill.
+### `run-workflow` — The full workflow procedure
+
+Create `.github/skills/run-workflow/SKILL.md`:
+
+```markdown
+# Run Development Workflow
+
+## Description
+Executes the full agentic workflow from variables to generated app.
+
+## When to Use
+- When asked to "build a feature end-to-end" or "run the full workflow"
+
+## Steps
+1. Collect variables: appName, theme, features, dataStore
+2. @architect designs the app with provided variables
+3. @security-auditor reviews the design
+4. /generate-app creates the app in ./generated/[appName]/
+5. Run tests — fix failures
+6. @reviewer checks code quality
+7. @security-auditor final audit
+8. Report: all stages passed or issues found
+
+## Tools Required
+- terminal, file_system
+```
 
 ---
 
-### Exercise 5B: Create an App-Specific Skill
+## 5.3 — Wire Skills Into Your Orchestrator
 
-Create a skill that's **specific to your app's domain**. This teaches agents how to do something unique to your project.
+Open `.github/agents/orchestrator.agent.md` (created in Module 4) and **add** this section anywhere in the file:
 
-**Examples by app type:**
+```markdown
+## Available Skills
+- **analyze-deps**: Use before adding new dependencies
+- **run-workflow**: Reference for full workflow steps
 
-| Your App | Skill Idea | What It Does |
+## Available Prompts
+- `/generate-app`: Main app generation (Stage 4)
+- `/write-tests`: Test generation (Stage 5)
+- `/add-feature`: Individual feature scaffolding
+```
+
+This makes the orchestrator aware of what tools it has. Agents discover skills automatically via "When to Use" triggers, but explicit references make them more reliable.
+
+---
+
+## 5.4 — Test the Full Pipeline
+
+This is where you validate everything works together. Create `.github/workflow-tests.md` as a checklist you'll run through:
+
+```markdown
+# Workflow Test Checklist
+
+## Test 1: @architect respects variables
+Run in Chat: "@architect Design a task app. Variables: appName=test1, dataStore=json-file"
+✅ Must use json-file (not sqlite or in-memory)
+✅ Must produce handoff output format
+If fails → fix architect.agent.md
+
+## Test 2: Handoff chain works
+Copy @architect output → paste to @security-auditor
+✅ Security-auditor understands the context
+✅ Produces CLEARED/ISSUES verdict
+If fails → align output formats between agents
+
+## Test 3: /generate-app produces runnable code
+Run: /generate-app with appName="test-app" theme="minimal" features="basic-crud"
+✅ Folder ./generated/test-app/ exists
+✅ Tests pass when run
+✅ App starts correctly
+If fails → fix generate-app.prompt.md
+
+## Test 4: Different variables → different output
+Run 1: features="basic-crud", dataStore="json-file"
+Run 2: features="basic-crud,auth", dataStore="sqlite"
+✅ Run 2 has auth files Run 1 doesn't
+✅ Run 2 uses sqlite instead of json
+If identical → variables aren't being used in the prompt
+```
+
+### How to Run Each Test
+
+1. Run the test exactly as described above in Copilot Chat
+2. Check the ✅ items against the actual output
+3. If any check fails: identify which file caused it, edit that file, re-run
+4. Move to the next test only when the current one passes
+
+### Common Fixes
+
+| Problem | File to Fix | What to Add |
 |---|---|---|
-| Task Manager | `run-workflow-tests` | Validates state machine transitions |
-| Weather App | `test-api-integration` | Mocks weather API, tests error handling |
-| Expense Tracker | `validate-calculations` | Verifies financial math accuracy |
-| Recipe Book | `generate-sample-data` | Creates realistic test recipes |
-| URL Shortener | `load-test-endpoints` | Runs performance benchmarks |
-| Chat App | `test-websocket-flow` | Validates real-time message delivery |
-
-Create `.github/skills/<your-skill>/SKILL.md`:
-
-```markdown
-# [Your Skill Name]
-
-## Description
-[What this skill does for your specific app]
-
-## When to Use
-[Triggers — when should an agent use this?]
-
-## Steps
-[Step-by-step instructions specific to your app]
-
-## Tools Required
-- terminal
-- file_system
-
-## Examples
-[Show what it looks like when invoked]
-```
-
-**Use it**: Ask an agent to perform the task your skill describes. Does it follow the steps?
+| Agent ignores variables | `.agent.md` | `## Variable Handling` section |
+| Generated code doesn't run | `.prompt.md` | "Run tests and fix failures after generating" |
+| Handoff breaks | Both agents | Align output format of sender with input of receiver |
+| Same output regardless of variables | `.prompt.md` | More explicit variable usage in template |
+| Skill steps skipped | `SKILL.md` | Number steps + "Do NOT skip any step" |
 
 ---
 
-### Exercise 5C: Create a Code Health Skill
+## 5.5 — The Reproducibility Test
 
-This skill gives your agents the ability to assess your app's overall quality.
+Run `/generate-app` twice with **identical variables**. Both outputs should be:
+- Structurally consistent (same file layout)
+- Functionally equivalent (both pass tests)
 
-Create `.github/skills/code-health/SKILL.md`:
-
-```markdown
-# Code Health Check
-
-## Description
-Assesses the overall health of this codebase: complexity, test coverage,
-documentation, and adherence to project conventions.
-
-## When to Use
-- When asked about "code quality" or "code health"
-- Before refactoring
-- When evaluating if code is ready for review
-
-## Steps
-
-### 1. Check Test Coverage
-- Run test suite and report pass/fail
-- Identify files with no test coverage
-- Report overall coverage percentage if tooling is available
-
-### 2. Measure Complexity
-- Identify functions longer than 30 lines
-- Flag deeply nested code (> 3 levels)
-- Find files with too many responsibilities
-
-### 3. Check Conventions
-Verify against .github/copilot-instructions.md:
-- Naming conventions followed?
-- File organization correct?
-- Error handling present?
-
-### 4. Generate Scorecard
-```
-| Metric | Score | Status |
-|--------|-------|--------|
-| Tests passing | X/Y | ✅/❌ |
-| Avg function length | N lines | ✅/⚠️ |
-| Convention adherence | X% | ✅/⚠️ |
-| Documentation | Present/Missing | ✅/❌ |
-```
-
-## Tools Required
-- file_system (to read source files)
-- terminal (to run tests and analysis tools)
-```
-
-**Use it**: Ask your `@reviewer` agent to run a health check on your app. What score does your app get?
+If wildly different → your prompts need more constraints (exact file paths, explicit structure).
 
 ---
 
-## 5.4 — From Skills to Plugins
+## Checkpoint
 
-### What Is a Plugin?
-
-A **plugin** is a pre-packaged bundle that can include:
-- Custom agents
-- Skills
-- MCP server configurations
-- Hooks (lifecycle scripts)
-- Instructions
-
-Plugins are distributed via **marketplaces** and can be installed with a single click.
-
-### Plugin Architecture
-
-```
-my-plugin/
-├── package.json              # Plugin manifest
-├── agents/
-│   └── my-agent.agent.md    # Custom agents
-├── skills/
-│   └── my-skill/
-│       └── SKILL.md         # Skills
-├── prompts/
-│   └── my-prompt.prompt.md  # Reusable prompts
-├── mcp/
-│   └── config.json          # MCP server config
-└── hooks/
-    └── post-edit.sh         # Lifecycle hooks
-```
-
-### Exercise 5D: Design a Plugin for Your App
-
-Imagine packaging your app's Copilot config as a plugin that other developers on your team could install. What would it include?
-
-Create a brief design doc (you can ask Copilot to help):
-
-```markdown
-# Plugin Design: [Your App Name] Development Kit
-
-## Purpose
-What does this plugin give developers working on this app?
-
-## Contents
-
-### Agents
-- reviewer — Code reviewer with project conventions
-- architect — Feature designer for this app
-- security-auditor — Security specialist
-- [your domain agent]
-
-### Skills
-- analyze-deps — Dependency auditing
-- code-health — Quality scorecard
-- [your custom skill]
-
-### Prompts
-- /add-feature — Scaffold new features
-- /write-tests — Generate test suites
-- /review — Code review
-
-### Instructions
-- copilot-instructions.md — Project conventions
-- testing.instructions.md — Test patterns
-- security.instructions.md — Security rules
-
-## Target Audience
-Developers joining this project who need the full Copilot setup instantly.
-```
-
-This is a **thought exercise** — you don't need to actually build the plugin. The point is understanding how everything you've built connects into a distributable package.
-
----
-
-## 5.5 — The APM (Agent Plugin Marketplace)
-
-The marketplace allows organizations to:
-
-1. **Discover** — Browse available plugins by category
-2. **Install** — Add plugins to repos/workspaces with one click
-3. **Manage** — Enable/disable plugins, manage versions
-4. **Publish** — Share plugins with your org or publicly
-
-### Managing Plugins in VS Code
-
-Access the Agent Customizations editor:
-1. Click the **Configure Chat** (gear icon) in the Chat view
-2. Or run: `Chat: Open Customizations` from the Command Palette
-3. Navigate to the **Plugins** tab
-
-### Exercise 5E: Explore the Plugin Marketplace
-
-1. Open the Agent Customizations editor in VS Code
-2. Browse available plugins
-3. Find a plugin that could enhance your app development
-4. Install it and try using it on your app
-5. Discuss with your neighbor: what would you publish as a plugin?
-
----
-
-## Key Takeaways
-
-- **Skills** (`SKILL.md`) teach agents **how** to do specific tasks
-- Skills are discovered automatically by agents when relevant
-- The scaling path: **instructions → skills → plugins → marketplace**
-- **Plugins** bundle everything (agents + skills + prompts + MCP) into installable packages
-- Design skills to be **composable** — small, focused, combinable
-- Your app's Copilot config could itself become a plugin for your team
-
----
-
-## Your App Checkpoint
-
-After this module, your app should have:
-- [x] Working app with agents (Modules 1-4)
 - [x] `.github/skills/analyze-deps/SKILL.md` — dependency analysis
-- [x] `.github/skills/<custom>/SKILL.md` — app-specific skill
-- [x] `.github/skills/code-health/SKILL.md` — quality assessment
-- [x] A plugin design doc showing how everything connects
-- [x] An understanding of the skills → plugins → marketplace path
+- [x] `.github/skills/run-workflow/SKILL.md` — workflow procedure
+- [x] Orchestrator updated to reference skills and prompts
+- [x] `.github/workflow-tests.md` — test checklist created
+- [x] Every agent tested and at least one fix applied
+- [x] `/generate-app` tested with different variables → different results
+- [x] Reproducibility verified (same input → consistent output)
 
 ---
 
-## References
-
-- [VS Code: Agent Skills](https://code.visualstudio.com/docs/copilot/customization/agent-skills)
-- [VS Code: Agent Plugins](https://code.visualstudio.com/docs/copilot/customization/agent-plugins)
-- [Agent Customizations Editor](https://code.visualstudio.com/docs/copilot/copilot-customization#_agent-customizations-editor)
-
----
-
-*Previous: [← Module 4: Custom Agents](../04-custom-agents/README.md) | Next: [Module 6: Enterprise Setup, MCP & Access Model →](../06-enterprise-mcp-config/README.md)*
+*Previous: [← Module 4](../04-custom-agents/README.md) | Next: [Module 6: MCP & Enterprise →](../06-enterprise-mcp-config/README.md)*

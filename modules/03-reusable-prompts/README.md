@@ -1,350 +1,211 @@
 # Module 3: Reusable Prompt Files
 
-> **Duration: 40 minutes** | **Difficulty: Intermediate**
+> **Duration: 35 minutes** | **Difficulty: Intermediate**
 
 ---
 
 ## Learning Objectives
 
-By the end of this module, you will:
-
-- Understand the purpose and structure of `.prompt.md` files
-- Create reusable prompts that help you build features in your app
-- Use template variables and file references in prompts
-- Use prompts to actually scaffold and add functionality to your app
-- Execute prompts via Copilot Chat slash commands
+- Create `.prompt.md` files with frontmatter, variables, and file references
+- Build prompts that generate code following your instructions (Module 2)
+- Design the variable system that makes your workflow produce different results
+- Create the `/generate-app` prompt — the core generation template
 
 ---
 
-## 3.1 — What Are Reusable Prompts?
+## Role in the Workflow
 
-Reusable prompts (`.prompt.md` files) are **templated, shareable instructions** that you can invoke as slash commands in Copilot Chat. Think of them as "macros" for AI interactions.
-
-### Why Use Prompt Files?
-
-| Without Prompt Files | With Prompt Files |
-|---|---|
-| Type the same long prompts repeatedly | Invoke `/my-prompt` in one command |
-| Inconsistent results across team members | Standardized, predictable outputs |
-| Knowledge locked in individuals' heads | Shareable via git |
-| No version control on prompts | Full git history on prompt evolution |
-
-### Where Do They Live?
-
-```
-.github/
-└── prompts/
-    ├── scaffold-component.prompt.md
-    ├── code-review.prompt.md
-    ├── refactor.prompt.md
-    └── write-tests.prompt.md
-```
-
-Prompts are discovered by Copilot when placed in `.github/prompts/`. They show up as slash commands in Copilot Chat (e.g., `/scaffold-component`).
+Prompts are the **generation templates**. Instructions (Module 2) define HOW code should look. Prompts define WHAT code to create. In the final workflow, agents (Module 4) invoke your prompts to produce the actual app.
 
 ---
 
-## 3.2 — Anatomy of a Prompt File
+## 3.1 — Anatomy of a Prompt File
 
-A `.prompt.md` file has two parts:
+Prompts live in `.github/prompts/` and show up as **slash commands** in Copilot Chat.
 
-1. **YAML frontmatter** (optional) — metadata, mode, tools, variables
-2. **Prompt body** — the actual prompt text in Markdown
-
-### Basic Structure
+To use a prompt: type `/` in Chat, pick your prompt from the list, fill in variables when asked.
 
 ```markdown
 ---
-description: "Scaffold a new component with tests and documentation"
+description: "What this prompt does (shown in command list)"
 mode: "agent"
 tools: ["file_system", "terminal"]
----
-
-# Scaffold Component
-
-Create a new component with the following structure:
-- Implementation file
-- Unit test file
-- README documentation
-
-## Requirements
-- Follow the project's code conventions
-- Include proper error handling
-- Add JSDoc/docstring comments
-- Export the component from the module's index file
-```
-
-### Frontmatter Options
-
-| Field | Purpose | Values |
-|---|---|---|
-| `description` | Shows in the slash command list | Any descriptive string |
-| `mode` | How Copilot executes the prompt | `"agent"` (can take actions), `"chat"` (conversation only) |
-| `tools` | Which tools the agent can use | `["file_system", "terminal", "browser"]` |
-| `variables` | Template variables the user fills in | Array of variable definitions |
-
----
-
-## 3.3 — Template Variables
-
-Prompt files support **variables** that get filled in at invocation time. This makes prompts flexible and reusable.
-
-### Defining Variables
-
-```markdown
----
-description: "Generate a REST API endpoint"
-mode: "agent"
 variables:
   - name: "resource"
-    description: "The resource name (e.g., 'users', 'orders')"
+    description: "Resource name (e.g., tasks, users)"
   - name: "operations"
     description: "CRUD operations to generate"
     default: "create, read, update, delete"
 ---
 
-# Generate REST API Endpoint
+# Generate Endpoint: {{resource}}
 
-Create a REST API endpoint for the `{{resource}}` resource with the following operations: {{operations}}.
+Create a REST API endpoint for `{{resource}}` with operations: {{operations}}.
 
 ## Requirements
-- Follow RESTful conventions
-- Include input validation
-- Add proper error responses (400, 404, 500)
-- Include request/response type definitions
+- Follow conventions in .github/copilot-instructions.md
+- Include input validation and error handling
+- Generate tests for each operation
 ```
 
-### Using File References
+**Key parts:**
+- `mode: "agent"` → can create files and run commands
+- `variables` → what changes between invocations (the inputs)
+- `{{variableName}}` → replaced at runtime
+- File references → `[conventions](.github/copilot-instructions.md)` for explicit context
 
-You can reference other files as context in your prompts:
+---
 
+## 3.2 — Dos and Don'ts
+
+| ✅ DO | ❌ DON'T |
+|---|---|
+| Use `mode: "agent"` for file-creating prompts | Forget `tools` — agent can't act without them |
+| Define variables for anything that changes | Hardcode values that should differ between runs |
+| Reference instruction files for conventions | Copy-paste rules from instructions into prompts |
+| Specify exact output structure (files to create) | Put agent personality/role here (use `.agent.md`) |
+| Add "After generating, run tests and fix" | Put multi-step decision logic (use skills) |
+| Keep each prompt focused on ONE task | Make a prompt that does everything |
+
+---
+
+## 3.3 — Build Your Prompts
+
+Create these three files in `.github/prompts/`. Each becomes a slash command you can run immediately.
+
+### `add-feature.prompt.md`
 ```markdown
 ---
-description: "Review code against our standards"
-mode: "chat"
----
-
-# Code Review
-
-Review the selected code against our project standards.
-
-Refer to the following guidelines:
-- [Code style](.github/instructions/code-style.instructions.md)
-- [Security](.github/instructions/security.instructions.md)
-- [Testing](.github/instructions/testing.instructions.md)
-
-Provide feedback in this format:
-1. **Critical** — Must fix before merging
-2. **Suggestion** — Would improve quality
-3. **Praise** — What's done well
-```
-
----
-
-## 3.4 — Build Your App with Prompts
-
-Now you'll create prompts **for your specific app** and use them to actually add features. This is where your app starts taking shape.
-
-### Exercise 3A: Create a Feature Scaffolding Prompt
-
-This prompt will be your go-to for adding new features to your app. Create `.github/prompts/add-feature.prompt.md` in **your app project**:
-
-```markdown
----
-description: "Add a new feature to the app with implementation, tests, and docs"
+description: "Add a new feature with implementation and tests"
 mode: "agent"
 tools: ["file_system", "terminal"]
 ---
 
-# Add New Feature
+# Add Feature
 
-Create a new feature for this application following our project conventions.
+Create a new feature following project conventions.
 
-## What to Create
-1. **Implementation** — The main feature logic in the appropriate directory
-2. **Tests** — Unit tests covering the main behaviors
-3. **Route/Endpoint** (if applicable) — Wire it up to the API
+## Create
+1. Implementation in the appropriate directory
+2. Tests covering main behaviors
+3. Route/endpoint (if applicable)
 
-## Requirements
-- Follow the conventions in .github/copilot-instructions.md
-- Follow testing conventions in .github/instructions/testing.instructions.md
+## Rules
+- Follow .github/copilot-instructions.md
 - Include input validation and error handling
-- Add appropriate logging
-- Make sure existing tests still pass after changes
-
-## After Creating
-- Run the test suite to verify nothing is broken
-- Show a summary of what was created and how to use it
+- Run tests after creating to verify
 ```
 
-**Now use it!** In Copilot Chat, type `/add-feature` and describe a feature for your app:
-
-Examples:
-- "Add a feature to create and list tasks with a title, description, and status"
-- "Add user authentication with login and register endpoints"
-- "Add a search feature that filters recipes by ingredient"
-- "Add an endpoint to shorten a URL and redirect to the original"
-
----
-
-### Exercise 3B: Create a Code Review Prompt
-
-Create `.github/prompts/review.prompt.md`:
-
+### `write-tests.prompt.md`
 ```markdown
 ---
-description: "Review code in this project against our standards"
-mode: "chat"
----
-
-# Code Review
-
-Review the provided code against our project standards.
-
-Check against:
-- [Security guidelines](.github/instructions/security.instructions.md)
-- [Testing conventions](.github/instructions/testing.instructions.md)
-- [Project conventions](.github/copilot-instructions.md)
-
-## Review Checklist
-1. **Correctness** — Does it do what it should? Edge cases handled?
-2. **Security** — Input validation? No hardcoded secrets? Safe queries?
-3. **Conventions** — Follows our naming, structure, and patterns?
-4. **Tests** — Are there tests? Do they cover the important cases?
-5. **Maintainability** — Will someone else understand this in 6 months?
-
-## Output Format
-For each finding:
-- **Severity**: Critical | Warning | Suggestion
-- **What**: The issue
-- **Fix**: How to resolve it (with code example)
-```
-
-**Use it**: Select some code you generated in Exercise 3A and run `/review` to check it against your standards.
-
----
-
-### Exercise 3C: Create a Test Generator Prompt
-
-Create `.github/prompts/write-tests.prompt.md`:
-
-```markdown
----
-description: "Generate tests for existing code in this project"
+description: "Generate tests for existing code"
 mode: "agent"
 tools: ["file_system", "terminal"]
 ---
 
 # Write Tests
 
-Generate comprehensive tests for the specified code.
-
-## Testing Approach
-- Follow the Arrange-Act-Assert pattern
-- Include happy path AND error cases
-- Test edge cases (empty inputs, nulls, boundaries)
-- Use descriptive test names: "should [behavior] when [condition]"
-- Mock external dependencies
-
-## What to Generate
-1. Unit tests for all public functions/methods
-2. At least one integration test if the code has external dependencies
-3. Test both success and failure scenarios
-
-## After Writing Tests
-- Run the test suite: verify all tests pass
-- Report coverage if tooling is available
+Generate tests using Arrange-Act-Assert pattern:
+- Unit tests for all public functions
+- Error/edge case tests
+- Descriptive names: "should [behavior] when [condition]"
+- Run tests after writing to verify they pass
 ```
 
-**Use it**: Point at a feature in your app and run `/write-tests` to generate its test suite.
+### `generate-app.prompt.md` — The main generation prompt (CRITICAL)
 
----
-
-### Exercise 3D: Create a Prompt with Variables
-
-Create a prompt with **template variables** that makes it flexible. Create `.github/prompts/add-endpoint.prompt.md`:
+This is the heart of your workflow. When you run this in Module 7, it produces the actual app:
 
 ```markdown
 ---
-description: "Add a new API endpoint with validation, error handling, and tests"
+description: "Generate a complete app in a new folder from variables"
 mode: "agent"
 tools: ["file_system", "terminal"]
 variables:
-  - name: "resource"
-    description: "Resource name (e.g., tasks, users, recipes)"
-  - name: "operations"
-    description: "Which operations to create"
-    default: "list, get, create, update, delete"
+  - name: "appName"
+    description: "Name for the generated application"
+  - name: "theme"
+    description: "Visual theme"
+    default: "minimal"
+  - name: "features"
+    description: "Comma-separated features to include"
+    default: "basic-crud"
+  - name: "dataStore"
+    description: "Storage backend"
+    default: "sqlite"
 ---
 
-# Add API Endpoint: {{resource}}
+# Generate App: {{appName}}
 
-Create a complete API endpoint for the `{{resource}}` resource.
+Create a complete application in `./generated/{{appName}}/`.
 
-## Operations
-{{operations}}
+## Configuration
+- Theme: {{theme}}
+- Features: {{features}}
+- Data Store: {{dataStore}}
 
-## Requirements for Each Operation
-- **List**: Pagination (limit + offset), filtering
-- **Get**: Return 404 if not found
-- **Create**: Validate required fields, return 201
-- **Update**: Validate input, return 404 if not found
-- **Delete**: Return 404 if not found, return 204 on success
+## Generate
+1. Project structure with package manifest
+2. Entry point and configuration
+3. Route handlers for each feature in {{features}}
+4. Data models for {{dataStore}}
+5. Tests for all features
+6. README with setup instructions
 
-## Implementation Checklist
-- [ ] Route/handler definitions
-- [ ] Input validation
-- [ ] Error handling with appropriate status codes
-- [ ] Type/model definitions for the resource
-- [ ] Unit tests for each operation
-- [ ] Follow project conventions from copilot-instructions.md
+## After Generation
+- Install dependencies
+- Run tests — fix any failures
+- Report what was created
 ```
 
-**Use it**: Run `/add-endpoint` and fill in your resource name. This should generate a complete CRUD endpoint for your app.
+---
+
+## 3.4 — Design Your Workflow Variables
+
+List what should change between workflow runs:
+
+| Variable | What It Affects |
+|---|---|
+| `appName` | Folder name, package name, references |
+| `theme` | Styling, UI choices, formatting |
+| `features` | Which modules/routes get created |
+| `dataStore` | Storage layer, model patterns |
+| `framework` | All code patterns and imports |
+
+Write these down — your agents (Module 4) will pass these variables to your prompts.
 
 ---
 
-### Exercise 3E: Use Your Prompts to Build the App
+## 3.5 — Test Your Prompts
 
-Now put it all together. Use your prompts to **actually build out your app**:
+Run `/generate-app` right now with a test name:
 
-1. Run `/add-feature` or `/add-endpoint` to add 2–3 features to your app
-2. Run `/write-tests` to generate tests for what you built
-3. Run `/review` to check the generated code against your standards
-4. Fix any issues the review found
+1. Open Copilot Chat (`Ctrl+Shift+I`)
+2. Type `/generate-app`
+3. When asked for variables, use: `appName: test-run-1`, `features: basic-crud`, `dataStore: json-file`
+4. Let it run
 
-By the end of this exercise, your app should have **real functionality** — built entirely through reusable prompts.
----
+**Then inspect the output:**
+- Did it create `./generated/test-run-1/`?
+- Are the files structured like your instructions specify?
+- Does `features: basic-crud` actually show up in the code?
+- Do tests pass?
 
-## Key Takeaways
+If something's wrong → edit `generate-app.prompt.md` → delete the test folder → run again.
 
-- **Prompt files** (`.prompt.md`) are reusable, version-controlled AI workflows
-- They appear as **slash commands** in Copilot Chat (e.g., `/add-feature`)
-- Use **variables** to make prompts flexible for different inputs
-- Use **file references** to ground prompts in your existing conventions
-- **`mode: "agent"`** allows the prompt to take actions (create files, run commands)
-- Prompts aren't just templates — they're **tools for building your app**
+> **Tip**: If the output ignores your variables, add "You MUST use the exact values provided above. Do not substitute defaults." to the prompt.
 
 ---
 
-## Your App Checkpoint
+## Checkpoint
 
-After this module, your app should have:
-- [x] Working app with project structure (Module 1)
-- [x] Copilot instructions configured (Module 2)
-- [x] `.github/prompts/add-feature.prompt.md` — for scaffolding features
-- [x] `.github/prompts/review.prompt.md` — for code review
-- [x] `.github/prompts/write-tests.prompt.md` — for generating tests
-- [x] `.github/prompts/add-endpoint.prompt.md` — for API endpoints (with variables)
-- [x] **2-3 actual features** built in your app using these prompts
+- [x] `.github/prompts/add-feature.prompt.md`
+- [x] `.github/prompts/write-tests.prompt.md`
+- [x] `.github/prompts/generate-app.prompt.md` — the core generation prompt
+- [x] Variable list designed for your app
+- [x] At least one prompt tested and improved based on output
 
 ---
 
-## References
-
-- [VS Code: Prompt Files](https://code.visualstudio.com/docs/copilot/copilot-customization#_prompt-files)
-- [Automate tasks and workflows](https://code.visualstudio.com/docs/copilot/customization/prompt-files)
-
----
-
-*Previous: [? Module 2: Custom Instructions](../02-custom-instructions/README.md) | Next: [Module 4: Custom Agents ?](../04-custom-agents/README.md)*
+*Previous: [← Module 2](../02-custom-instructions/README.md) | Next: [Module 4: Custom Agents →](../04-custom-agents/README.md)*
