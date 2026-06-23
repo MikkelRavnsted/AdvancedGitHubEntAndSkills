@@ -31,7 +31,7 @@ To use a prompt: type `/` in Chat, pick your prompt from the list, fill in varia
 ---
 description: "What this prompt does (shown in command list)"
 mode: "agent"
-tools: ["file_system", "terminal"]
+tools: [execute, read, edit, search]
 variables:
   - name: "resource"
     description: "Resource name (e.g., tasks, users)"
@@ -80,7 +80,7 @@ Create these three files in `.github/prompts/`. Each becomes a slash command you
 ---
 description: "Add a new feature with implementation and tests"
 mode: "agent"
-tools: ["file_system", "terminal"]
+tools: [execute, read, edit, search]
 ---
 
 # Add Feature
@@ -103,7 +103,7 @@ Create a new feature following project conventions.
 ---
 description: "Generate tests for existing code"
 mode: "agent"
-tools: ["file_system", "terminal"]
+tools: [execute, read, edit, search]
 ---
 
 # Write Tests
@@ -123,7 +123,7 @@ This is the heart of your workflow. When you run this in Module 7, it produces t
 ---
 description: "Generate a complete app in a new folder from variables"
 mode: "agent"
-tools: ["file_system", "terminal"]
+tools: [execute, read, edit, search]
 variables:
   - name: "appName"
     description: "Name for the generated application"

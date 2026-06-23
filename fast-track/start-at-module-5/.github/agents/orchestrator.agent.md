@@ -1,6 +1,6 @@
 ---
 description: "Orchestrates the full app generation workflow"
-tools: ["file_system", "terminal"]
+tools: [execute, read, edit, search, agent, todo]
 ---
 
 # Orchestrator

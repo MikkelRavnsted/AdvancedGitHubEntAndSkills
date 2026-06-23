@@ -1,7 +1,7 @@
 ---
 description: "Generate a pull request description from the current branch changes"
 mode: "agent"
-tools: ["terminal"]
+tools: [execute, read, search]
 ---
 
 # Generate PR Description

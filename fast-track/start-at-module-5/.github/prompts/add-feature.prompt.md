@@ -1,7 +1,7 @@
 ---
 description: "Add a new feature to the app with implementation, tests, and docs"
 mode: "agent"
-tools: ["file_system", "terminal"]
+tools: [execute, read, edit, search]
 ---
 
 # Add New Feature

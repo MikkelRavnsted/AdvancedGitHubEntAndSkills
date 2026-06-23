@@ -138,7 +138,7 @@ Use cases:
 Your workflow without MCP:
 ```
 @orchestrator → @architect → @security-auditor → /generate-app → @reviewer
-(uses: file_system, terminal)
+(uses: execute, read, edit, search)
 ```
 
 Your workflow with MCP:

@@ -1,7 +1,7 @@
 ---
 description: "Generate a complete app in a new folder from variables"
 mode: "agent"
-tools: ["file_system", "terminal"]
+tools: [execute, read, edit, search]
 variables:
   - name: "appName"
     description: "Name for the generated application"

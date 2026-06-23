@@ -1,7 +1,7 @@
 ---
 description: "Scaffold a new feature with implementation, tests, and documentation"
 mode: "agent"
-tools: ["file_system", "terminal"]
+tools: [execute, read, edit, search]
 variables:
   - name: "featureName"
     description: "Name of the feature to scaffold (e.g., 'user-authentication')"

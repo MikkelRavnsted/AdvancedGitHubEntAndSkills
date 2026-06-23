@@ -1,6 +1,6 @@
 ---
 description: "Reviews generated code against project conventions"
-tools: ["file_system"]
+tools: [read, search]
 ---
 
 # Code Reviewer

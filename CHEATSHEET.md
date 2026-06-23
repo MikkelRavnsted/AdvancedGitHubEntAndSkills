@@ -37,7 +37,7 @@ applyTo: "**/*.ts,**/*.tsx"
 ---
 description: "What this prompt does"
 mode: "agent"
-tools: ["file_system", "terminal"]
+tools: [execute, read, edit, search]
 ---
 
 # Prompt Title
@@ -52,7 +52,7 @@ Your prompt instructions here.
 ```markdown
 ---
 description: "One-line description of the agent's role"
-tools: ["file_system", "terminal"]
+tools: [execute, read, edit, search]
 ---
 
 # Agent Name

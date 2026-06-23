@@ -1,6 +1,6 @@
 ---
 description: "Security auditor that reviews designs and code for vulnerabilities"
-tools: ["file_system"]
+tools: [read, search, web]
 ---
 
 # Security Auditor

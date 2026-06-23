@@ -1,7 +1,7 @@
 ---
 description: "Generate a complete application from scratch using the full agentic workflow"
 mode: "agent"
-tools: ["file_system", "terminal"]
+tools: [execute, read, edit, search]
 variables:
   - name: "appName"
     description: "Name of the generated application (used as folder name and package name)"

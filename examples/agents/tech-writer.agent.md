@@ -1,6 +1,6 @@
 ---
 description: "Technical writer specializing in API docs, architecture decisions, and developer guides"
-tools: ["file_system"]
+tools: [read, search]
 ---
 
 # Technical Writer

@@ -42,7 +42,7 @@ What this skill does.
 3. [Expected output at each step]
 
 ## Tools Required
-- terminal, file_system
+- execute, read, search
 ```
 
 ### Dos and Don'ts
@@ -80,7 +80,7 @@ Checks project dependencies for security issues and outdated packages.
 4. Report: total deps, vulnerabilities (by severity), outdated packages
 
 ## Tools Required
-- terminal, file_system
+- execute, read, search
 ```
 
 ### `run-workflow` — The full workflow procedure
@@ -107,7 +107,7 @@ Executes the full agentic workflow from variables to generated app.
 8. Report: all stages passed or issues found
 
 ## Tools Required
-- terminal, file_system
+- execute, read, edit, search, agent
 ```
 
 ---

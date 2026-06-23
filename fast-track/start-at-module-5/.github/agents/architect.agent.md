@@ -1,6 +1,6 @@
 ---
 description: "Designs app architecture based on requirements and variables"
-tools: ["file_system"]
+tools: [execute, read, edit, search]
 ---
 
 # Architect

@@ -1,7 +1,7 @@
 ---
 description: "Generate tests for existing code in this project"
 mode: "agent"
-tools: ["file_system", "terminal"]
+tools: [execute, read, edit, search]
 ---
 
 # Write Tests

@@ -95,8 +95,8 @@ curl -X GET https://api.example.com/resource/123 \
 ```
 
 ## Tools Required
-- file_system (to read source code and type definitions)
-- terminal (to run documentation generators if available)
+- read (to read source code and type definitions)
+- execute (to run documentation generators if available)
 
 ## Examples
 

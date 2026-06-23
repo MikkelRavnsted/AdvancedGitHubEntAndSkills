@@ -1,6 +1,6 @@
 ---
 description: "DevOps engineer specializing in CI/CD, infrastructure, and deployment automation"
-tools: ["file_system", "terminal"]
+tools: [execute, read, edit, search]
 ---
 
 # DevOps Engineer
