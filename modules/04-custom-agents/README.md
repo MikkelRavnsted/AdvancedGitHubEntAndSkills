@@ -35,8 +35,14 @@ Agent files live in `.github/agents/` and are invoked with `@agent-name` in Copi
 
 ```markdown
 ---
-description: "What this agent does (shown in agent list)"
-tools: ["file_system", "terminal"]
+description: "[What this agent does — shown in agent picker]"
+tools: [execute, read, edit, search, web, agent, todo]
+handoffs:
+  - label: "[Button text for the handoff]"
+    agent: "[target-agent-name]"
+    prompt: "[Context/instructions passed to the next agent]"
+    send: true/false
+    model: "[Model Name] (copilot)"
 ---
 
 # Agent Name
@@ -55,12 +61,33 @@ You are a [role]. Your job is to [specific responsibility].
 - [Constraints and boundaries]
 ```
 
+### The `handoffs` Frontmatter Property
+
+The `handoffs` property in the YAML frontmatter declares **automatic handoff buttons** that appear after the agent completes its response. This replaces the manual copy-paste workflow with a single click.
+
+| Property | Required | Description |
+|----------|----------|-------------|
+| `label` | Yes | Button text shown to the user (e.g., "Start Implementation") |
+| `agent` | Yes | The target agent name (without `@`) to hand off to |
+| `prompt` | No | Instructions/context passed to the next agent |
+| `send` | No | When `true`, automatically sends the handoff (no confirmation) |
+| `model` | No | Override which model the target agent uses (format: `"Model Name (copilot)"`) |
+
+**Key details:**
+- `handoffs` is an array — an agent can declare multiple handoff targets
+- The `prompt` field seeds the next agent's conversation with context
+- Set `send: true` to auto-trigger the handoff without user confirmation
+- Use `model` to ensure the target agent runs on a specific model (e.g., `GPT-4.1 (copilot)`)
+- Use multiple entries when an agent has conditional next steps (e.g., pass vs. fail)
+- Handoff buttons give the user control — they choose when to trigger the next stage
+
 ### Dos and Don'ts
 
 | ✅ DO | ❌ DON'T |
 |---|---|
 | One focused role per agent | Give an agent multiple unrelated jobs |
 | Define explicit output format | Leave output unstructured |
+| Use `handoffs` frontmatter for next steps | Rely on manual copy-paste between agents |
 | Add `## Handoff Output` section | Repeat rules from instructions (inherited) |
 | Reference prompts: "Use `/add-feature`" | Put task-specific steps here (use skills) |
 | Restrict tools to what's needed | Make agents too generic ("helpful assistant") |
@@ -75,8 +102,13 @@ Create these four files in `.github/agents/`. After creating each one, **test it
 ### `architect.agent.md` — Designs the app structure
 ```markdown
 ---
-description: "Designs app architecture based on requirements and variables"
-tools: ["file_system"]
+description: Designs app architecture based on requirements and variables
+tools: [execute, read, edit, search]
+handoffs:
+  - label: Send to Security Auditor
+    agent: security-auditor
+    prompt: Review this architecture design for security issues
+    send: true
 ---
 
 # Architect
@@ -105,8 +137,17 @@ ALWAYS use provided variables. Never substitute defaults:
 ### `security-auditor.agent.md` — Reviews for vulnerabilities
 ```markdown
 ---
-description: "Security auditor that reviews designs and code"
-tools: ["file_system"]
+description: Reviews designs and code for security vulnerabilities
+tools: [read, search, web]
+handoffs:
+  - label: Proceed to Implementation
+    agent: orchestrator
+    prompt: Security review CLEARED. Proceed with implementation.
+    send: true
+  - label: Return to Architect
+    agent: architect
+    prompt: Security issues found. Please revise the design to address these findings.
+    send: true
 ---
 
 # Security Auditor
@@ -127,8 +168,13 @@ You review designs and code for security vulnerabilities.
 ### `reviewer.agent.md` — Validates code quality
 ```markdown
 ---
-description: "Reviews generated code against project conventions"
-tools: ["file_system"]
+description: Reviews generated code against project conventions
+tools: [read, search]
+handoffs:
+  - label: Send to Final Security Audit
+    agent: security-auditor
+    prompt: Code review APPROVED. Please perform a final security audit on the implementation.
+    send: true
 ---
 
 # Code Reviewer
@@ -149,8 +195,21 @@ You review code against .github/copilot-instructions.md conventions.
 ### `orchestrator.agent.md` — Coordinates the full workflow
 ```markdown
 ---
-description: "Orchestrates the full app generation workflow"
-tools: ["file_system", "terminal"]
+description: Orchestrates the full app generation workflow
+tools: [execute, read, edit, search, agent, todo]
+handoffs:
+  - label: Start Design Phase
+    agent: architect
+    prompt: Design the application with these variables
+    send: true
+  - label: Run Security Review
+    agent: security-auditor
+    prompt: Review the current design/implementation for security issues
+    send: true
+  - label: Run Code Review
+    agent: reviewer
+    prompt: Review the generated code against project conventions
+    send: true
 ---
 
 # Orchestrator
