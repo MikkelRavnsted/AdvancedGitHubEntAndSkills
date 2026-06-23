@@ -2,17 +2,12 @@
 description: "Scaffold a new feature with implementation, tests, and documentation"
 mode: "agent"
 tools: [execute, read, edit, search]
-variables:
-  - name: "featureName"
-    description: "Name of the feature to scaffold (e.g., 'user-authentication')"
-  - name: "language"
-    description: "Programming language to use"
-    default: "typescript"
+argument-hint: "featureName language (e.g., user-authentication typescript)"
 ---
 
-# Scaffold Feature: {{featureName}}
+# Scaffold Feature: ${input:featureName}
 
-Create a complete feature scaffold in {{language}} with all necessary files.
+Create a complete feature scaffold in ${input:language} with all necessary files.
 
 ## What to Create
 
@@ -37,15 +32,15 @@ use this layout:
 
 ```
 src/
-└── {{featureName}}/
+└── ${input:featureName}/
     ├── index.[ext]          # Public API / exports
-    ├── {{featureName}}.[ext] # Main implementation
+    ├── ${input:featureName}.[ext] # Main implementation
     ├── types.[ext]          # Type definitions
     └── utils.[ext]          # Helper functions (if needed)
 
 tests/
-└── {{featureName}}/
-    ├── {{featureName}}.test.[ext]  # Unit tests
+└── ${input:featureName}/
+    ├── ${input:featureName}.test.[ext]  # Unit tests
     └── integration.test.[ext]       # Integration test
 ```
 

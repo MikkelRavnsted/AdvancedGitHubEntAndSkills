@@ -1,35 +1,24 @@
 ---
-description: "Generate a complete app in a new folder from variables"
+description: "Generate a complete app in a new folder"
 mode: "agent"
 tools: [execute, read, edit, search]
-variables:
-  - name: "appName"
-    description: "Name for the generated application"
-  - name: "theme"
-    description: "Visual theme (minimal, dark, colorful, retro)"
-    default: "minimal"
-  - name: "features"
-    description: "Comma-separated features to include"
-    default: "basic-crud"
-  - name: "dataStore"
-    description: "Storage backend (sqlite, json-file, in-memory)"
-    default: "sqlite"
+argument-hint: "appName theme features dataStore (e.g., my-app minimal basic-crud sqlite)"
 ---
 
-# Generate App: {{appName}}
+# Generate App: ${input:appName}
 
-Create a complete application in `./generated/{{appName}}/`.
+Create a complete application in `./generated/${input:appName}/`.
 
 ## Configuration
-- Theme: {{theme}}
-- Features: {{features}}
-- Data Store: {{dataStore}}
+- Theme: ${input:theme}
+- Features: ${input:features}
+- Data Store: ${input:dataStore}
 
 ## Generate
-1. Project structure with package.json (name: {{appName}})
+1. Project structure with package.json (name: ${input:appName})
 2. Entry point and configuration
-3. Route handlers for each feature in {{features}}
-4. Data models for {{dataStore}}
+3. Route handlers for each feature in ${input:features}
+4. Data models for ${input:dataStore}
 5. Tests for all features
 6. README with setup instructions
 

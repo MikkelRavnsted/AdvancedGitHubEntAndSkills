@@ -6,9 +6,9 @@
 
 ## Learning Objectives
 
-- Create `.prompt.md` files with frontmatter, variables, and file references
+- Create `.prompt.md` files with frontmatter, `argument-hint`, and file references
 - Build prompts that generate code following your instructions (Module 2)
-- Design the variable system that makes your workflow produce different results
+- Design the input system that makes your workflow produce different results
 - Create the `/generate-app` prompt — the core generation template
 
 ---
@@ -32,17 +32,12 @@ To use a prompt: type `/` in Chat, pick your prompt from the list, fill in varia
 description: "What this prompt does (shown in command list)"
 mode: "agent"
 tools: [execute, read, edit, search]
-variables:
-  - name: "resource"
-    description: "Resource name (e.g., tasks, users)"
-  - name: "operations"
-    description: "CRUD operations to generate"
-    default: "create, read, update, delete"
+argument-hint: "resource name and operations (e.g., tasks create,read,update,delete)"
 ---
 
-# Generate Endpoint: {{resource}}
+# Generate Endpoint: ${input:resource}
 
-Create a REST API endpoint for `{{resource}}` with operations: {{operations}}.
+Create a REST API endpoint for `${input:resource}` with operations: ${input:operations}.
 
 ## Requirements
 - Follow conventions in .github/copilot-instructions.md
@@ -52,8 +47,8 @@ Create a REST API endpoint for `{{resource}}` with operations: {{operations}}.
 
 **Key parts:**
 - `mode: "agent"` → can create files and run commands
-- `variables` → what changes between invocations (the inputs)
-- `{{variableName}}` → replaced at runtime
+- `argument-hint` → hint text shown in the chat input to guide users
+- `${input:variableName}` → prompts user for input at runtime
 - File references → `[conventions](.github/copilot-instructions.md)` for explicit context
 
 ---
@@ -63,7 +58,7 @@ Create a REST API endpoint for `{{resource}}` with operations: {{operations}}.
 | ✅ DO | ❌ DON'T |
 |---|---|
 | Use `mode: "agent"` for file-creating prompts | Forget `tools` — agent can't act without them |
-| Define variables for anything that changes | Hardcode values that should differ between runs |
+| Use `argument-hint` to guide user input | Hardcode values that should differ between runs |
 | Reference instruction files for conventions | Copy-paste rules from instructions into prompts |
 | Specify exact output structure (files to create) | Put agent personality/role here (use `.agent.md`) |
 | Add "After generating, run tests and fix" | Put multi-step decision logic (use skills) |
@@ -121,37 +116,26 @@ This is the heart of your workflow. When you run this in Module 7, it produces t
 
 ```markdown
 ---
-description: "Generate a complete app in a new folder from variables"
+description: "Generate a complete app in a new folder"
 mode: "agent"
 tools: [execute, read, edit, search]
-variables:
-  - name: "appName"
-    description: "Name for the generated application"
-  - name: "theme"
-    description: "Visual theme"
-    default: "minimal"
-  - name: "features"
-    description: "Comma-separated features to include"
-    default: "basic-crud"
-  - name: "dataStore"
-    description: "Storage backend"
-    default: "sqlite"
+argument-hint: "appName theme features dataStore (e.g., my-app minimal basic-crud sqlite)"
 ---
 
-# Generate App: {{appName}}
+# Generate App: ${input:appName}
 
-Create a complete application in `./generated/{{appName}}/`.
+Create a complete application in `./generated/${input:appName}/`.
 
 ## Configuration
-- Theme: {{theme}}
-- Features: {{features}}
-- Data Store: {{dataStore}}
+- Theme: ${input:theme}
+- Features: ${input:features}
+- Data Store: ${input:dataStore}
 
 ## Generate
 1. Project structure with package manifest
 2. Entry point and configuration
-3. Route handlers for each feature in {{features}}
-4. Data models for {{dataStore}}
+3. Route handlers for each feature in ${input:features}
+4. Data models for ${input:dataStore}
 5. Tests for all features
 6. README with setup instructions
 
@@ -163,7 +147,7 @@ Create a complete application in `./generated/{{appName}}/`.
 
 ---
 
-## 3.4 — Design Your Workflow Variables
+## 3.4 — Design Your Input Variables
 
 List what should change between workflow runs:
 
@@ -175,7 +159,7 @@ List what should change between workflow runs:
 | `dataStore` | Storage layer, model patterns |
 | `framework` | All code patterns and imports |
 
-Write these down — your agents (Module 4) will pass these variables to your prompts.
+Write these down — your agents (Module 4) will pass these as inputs to your prompts.
 
 ---
 
@@ -185,7 +169,7 @@ Run `/generate-app` right now with a test name:
 
 1. Open Copilot Chat (`Ctrl+Shift+I` in VS Code, or your IDE's Copilot Chat shortcut)
 2. Type `/generate-app`
-3. When asked for variables, use: `appName: test-run-1`, `features: basic-crud`, `dataStore: json-file`
+3. Provide input in the chat: `appName=test-run-1 features=basic-crud dataStore=json-file`
 4. Let it run
 
 **Then inspect the output:**
@@ -196,7 +180,7 @@ Run `/generate-app` right now with a test name:
 
 If something's wrong → edit `generate-app.prompt.md` → delete the test folder → run again.
 
-> **Tip**: If the output ignores your variables, add "You MUST use the exact values provided above. Do not substitute defaults." to the prompt.
+> **Tip**: If the output ignores your inputs, add "You MUST use the exact values provided above. Do not substitute defaults." to the prompt.
 
 ---
 
@@ -205,7 +189,7 @@ If something's wrong → edit `generate-app.prompt.md` → delete the test folde
 - [x] `.github/prompts/add-feature.prompt.md`
 - [x] `.github/prompts/write-tests.prompt.md`
 - [x] `.github/prompts/generate-app.prompt.md` — the core generation prompt
-- [x] Variable list designed for your app
+- [x] Input variables designed for your app
 - [x] At least one prompt tested and improved based on output
 
 ---
