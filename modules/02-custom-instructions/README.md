@@ -129,7 +129,7 @@ Create `AGENTS.md` in your project root — this tells autonomous agents how to 
 
 ## 2.4 — Verify It Works
 
-Open Copilot Chat (`Ctrl+Shift+I`) and type:
+Open Copilot Chat (`Ctrl+Shift+I` in VS Code, or your IDE's Copilot Chat shortcut) and type:
 
 ```
 What are the coding conventions for this project?

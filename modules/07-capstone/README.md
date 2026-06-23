@@ -53,6 +53,8 @@ Pick your first run:
 
 Open Copilot Chat and invoke your orchestrator:
 
+> **Note:** The `@orchestrator` agent and full handoff chain require VS Code. If you're using another IDE, follow the **Visual Studio / JetBrains workaround** below.
+
 ```
 @orchestrator Generate an app with these variables:
 - appName: my-tasks
@@ -70,6 +72,18 @@ Open Copilot Chat and invoke your orchestrator:
 4. Generates the app files in `./generated/my-tasks/`
 5. Runs tests
 6. Reports what was created
+
+### Visual Studio / JetBrains Workaround
+
+Without custom agents, run the workflow manually using prompts:
+
+1. **Generate** — Run `/generate-app` with your variables (creates the app)
+2. **Security review** — Ask Chat: *"Review the generated code in ./generated/my-tasks/ for OWASP Top 10 security issues"*
+3. **Code review** — Ask Chat: *"Review the generated code against the conventions in .github/copilot-instructions.md"*
+4. **Fix** — Address any issues found, re-run `/generate-app` if needed
+5. **Test** — Run tests manually (`npm test` / `pytest` / your command)
+
+You get the same end result — a generated, reviewed, tested app — but you coordinate the stages instead of the orchestrator.
 
 > **If the orchestrator doesn't coordinate all stages**: Your `orchestrator.agent.md` might need stronger instructions. Add "You MUST complete all 7 stages in order. Report progress after each stage."
 

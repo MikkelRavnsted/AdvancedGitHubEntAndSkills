@@ -11,6 +11,8 @@
 - Test the full workflow pipeline and fix issues through iteration
 - Validate that variable changes produce different (correct) output
 
+> **\u26a0\ufe0f VS Code only:** Skills (`SKILL.md` files) are currently only supported in VS Code. If you're using another IDE, you can still create these files for use with VS Code or GitHub.com Copilot Chat later.
+
 ---
 
 ## Role in the Workflow

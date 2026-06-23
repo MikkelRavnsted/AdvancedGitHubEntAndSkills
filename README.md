@@ -28,9 +28,24 @@ By the end, you'll invoke `@orchestrator` with a set of variables and get a work
 | Requirement | Details |
 |---|---|
 | **GitHub Copilot license** | Copilot Business or Enterprise (Individual works for most labs) |
-| **VS Code** | With GitHub Copilot + Copilot Chat extensions |
+| **IDE with Copilot support** | VS Code, Visual Studio, JetBrains IDEs, or Neovim — with Copilot extensions installed |
 | **GitHub account** | With access to this repository |
 | **Runtime** | Node.js 20+, Python 3.11+, or your preferred language runtime |
+
+### IDE Support Notes
+
+This workshop uses GitHub Copilot customization files (`.instructions.md`, `.prompt.md`, `.agent.md`, `SKILL.md`) which live in `.github/` and work across supported IDEs. Some features differ by IDE:
+
+| Feature | VS Code | Visual Studio | JetBrains | Neovim |
+|---|---|---|---|---|
+| Custom instructions | ✅ | ✅ | ✅ | ✅ |
+| Reusable prompts (`.prompt.md`) | ✅ | ✅ | ✅ | ❌ |
+| Custom agents (`.agent.md`) | ✅ | ❌ | ❌ | ❌ |
+| Skills (`SKILL.md`) | ✅ | ❌ | ❌ | ❌ |
+| MCP server config | ✅ | ✅ (Preview) | ✅ | ❌ |
+| Agent handoffs (`handoffs:`) | ✅ | ❌ | ❌ | ❌ |
+
+> **Using Visual Studio or JetBrains?** You can complete Modules 1–3 fully. For Modules 4–6, you'll write the files (they're just Markdown) but invoke them via VS Code or GitHub.com Copilot Chat to test. Module 7 works best in VS Code.
 
 ---
 
@@ -110,7 +125,7 @@ your-workspace/
 │   │   └── run-workflow/SKILL.md        ← Full workflow steps
 │   └── workflow-tests.md                ← Pipeline validation checklist
 ├── .vscode/
-│   └── mcp.json                         ← MCP server connections (optional)
+│   └── mcp.json                         ← MCP server connections (VS Code / VS)
 ├── AGENTS.md                            ← Autonomous agent behavior
 └── generated/
     └── [appName]/                       ← Your generated app (the output!)
@@ -143,7 +158,7 @@ Set up workspace → Instructions  →  Prompts        →  Agents + Handoffs
 | **Prompts** | `.github/prompts/*.prompt.md` | Reusable generation templates with variables |
 | **Agents** | `.github/agents/*.agent.md` | Specialized roles with handoff protocols |
 | **Skills** | `.github/skills/*/SKILL.md` | Step-by-step procedures agents follow |
-| **MCP** | `.vscode/mcp.json` | External tool connections |
+| **MCP** | `.vscode/mcp.json` | External tool connections (VS Code / Visual Studio) |
 | **AGENTS.md** | `AGENTS.md` | Rules for autonomous/cloud agents |
 
 ---
@@ -161,9 +176,13 @@ Set up workspace → Instructions  →  Prompts        →  Agents + Handoffs
 ## Resources
 
 - [GitHub Copilot Documentation](https://docs.github.com/en/copilot)
-- [VS Code Copilot Customization](https://code.visualstudio.com/docs/copilot/copilot-customization)
 - [Custom Instructions Reference](https://docs.github.com/en/copilot/customizing-copilot/adding-repository-custom-instructions-for-github-copilot)
 - [Model Context Protocol](https://modelcontextprotocol.io/)
+
+**IDE-specific docs:**
+- [VS Code — Copilot Customization](https://code.visualstudio.com/docs/copilot/copilot-customization)
+- [Visual Studio — Copilot Customization](https://learn.microsoft.com/en-us/visualstudio/ide/copilot-chat-context)
+- [JetBrains — Copilot Custom Instructions](https://docs.github.com/en/copilot/customizing-copilot/adding-repository-custom-instructions-for-github-copilot)
 
 ---
 

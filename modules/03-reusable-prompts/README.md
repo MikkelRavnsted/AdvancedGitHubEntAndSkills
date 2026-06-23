@@ -25,6 +25,8 @@ Prompts live in `.github/prompts/` and show up as **slash commands** in Copilot 
 
 To use a prompt: type `/` in Chat, pick your prompt from the list, fill in variables when asked.
 
+> **IDE support:** Reusable prompts work in VS Code, Visual Studio, and JetBrains IDEs. They are not currently supported in Neovim.
+
 ```markdown
 ---
 description: "What this prompt does (shown in command list)"
@@ -181,7 +183,7 @@ Write these down — your agents (Module 4) will pass these variables to your pr
 
 Run `/generate-app` right now with a test name:
 
-1. Open Copilot Chat (`Ctrl+Shift+I`)
+1. Open Copilot Chat (`Ctrl+Shift+I` in VS Code, or your IDE's Copilot Chat shortcut)
 2. Type `/generate-app`
 3. When asked for variables, use: `appName: test-run-1`, `features: basic-crud`, `dataStore: json-file`
 4. Let it run

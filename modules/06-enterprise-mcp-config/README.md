@@ -13,6 +13,8 @@
 - Apply pre/post chat hooks for guardrails
 - Know what MCP adds to your workflow vs. what you already have
 
+> **IDE support:** MCP configuration is supported in VS Code (`.vscode/mcp.json`) and Visual Studio (Preview). JetBrains supports MCP through its own configuration format. If you're not on VS Code or Visual Studio, you can still review the concepts and apply them when support arrives in your IDE.
+
 ---
 
 ## Role in the Workflow
@@ -76,7 +78,7 @@ This gives your agents the ability to make HTTP requests (useful for checking AP
 }
 ```
 
-**Step 2** — Reload VS Code (Ctrl+Shift+P → "Reload Window")
+**Step 2** — Reload your IDE (VS Code: `Ctrl+Shift+P` → "Reload Window")
 
 **Step 3** — Test it in Chat:
 ```

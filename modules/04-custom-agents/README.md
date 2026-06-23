@@ -11,6 +11,14 @@
 - Create an orchestrator agent that coordinates the full workflow
 - Test agent outputs and iterate on agent files to fix issues
 
+> **\u26a0\ufe0f VS Code only:** Custom agents (`.agent.md` files) and the `handoffs` frontmatter are currently only supported in VS Code. If you're using Visual Studio or JetBrains, you can still create these files (they're Markdown) and test them via VS Code or GitHub.com Copilot Chat.>
+> **Workaround for Visual Studio / JetBrains:** You can replicate the agentic workflow manually using prompts:
+> 1. Run `/generate-app` with your variables (prompts are supported)
+> 2. Copy the output and ask Copilot Chat to review it for security issues
+> 3. Ask Copilot Chat to review code quality against your instructions
+> 4. Fix any issues and re-run
+>
+> You lose the automated handoff chain, but still get the benefit of instructions + prompts + variables driving consistent output.
 ---
 
 ## Role in the Workflow

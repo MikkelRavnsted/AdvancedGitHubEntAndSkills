@@ -21,9 +21,9 @@ Every file you create in this workshop lives in `.github/` and serves a specific
 | **Instructions** | `.github/copilot-instructions.md` | Rules ALL generated code must follow |
 | **Path Instructions** | `.github/instructions/*.instructions.md` | Rules for specific file types |
 | **Prompts** | `.github/prompts/*.prompt.md` | Repeatable generation templates with variables |
-| **Agents** | `.github/agents/*.agent.md` | Specialized roles that orchestrate the workflow |
-| **Skills** | `.github/skills/*/SKILL.md` | Step-by-step procedures agents can follow |
-| **MCP Config** | `.vscode/mcp.json` | External tools agents can access |
+| **Agents** | `.github/agents/*.agent.md` | Specialized roles that orchestrate the workflow (VS Code only) |
+| **Skills** | `.github/skills/*/SKILL.md` | Step-by-step procedures agents can follow (VS Code only) |
+| **MCP Config** | `.vscode/mcp.json` | External tools agents can access (VS Code / Visual Studio) |
 | **Agent Instructions** | `AGENTS.md` | Rules for the cloud coding agent |
 
 These files layer together — instructions apply to everything, agents invoke prompts, prompts follow instructions, skills teach agents procedures.
@@ -76,7 +76,7 @@ mkdir generated
 git init && git add . && git commit -m "chore: initial workspace setup"
 ```
 
-Verify: Copilot Chat works (`Ctrl+Shift+I`) and the `.github/` folder exists.
+Verify: Copilot Chat works (`Ctrl+Shift+I` in VS Code, or your IDE's Copilot Chat shortcut) and the `.github/` folder exists.
 
 ---
 
